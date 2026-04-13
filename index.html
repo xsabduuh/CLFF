@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeOS — Dashboard</title>
+  <title>LifeOS — لوحة التحكم الذكية</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== المتغيرات الأساسية (محسّنة) ===== */
+    /* ===== المتغيرات الأساسية ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -58,7 +58,6 @@
       z-index: 100;
       transition: transform var(--transition);
     }
-
     .sidebar-logo {
       display: flex;
       align-items: center;
@@ -71,98 +70,60 @@
       width: 32px; height: 32px;
       background: var(--accent);
       border-radius: 8px;
-      display: grid;
-      place-items: center;
-      font-size: 14px;
-      color: #fff;
-      flex-shrink: 0;
+      display: grid; place-items: center;
+      font-size: 14px; color: #fff; flex-shrink: 0;
     }
-    .logo-text {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      color: var(--text);
-    }
+    .logo-text { font-size: 1rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
     .logo-text span { color: var(--accent); }
 
     .sidebar-section {
       padding: 14px 12px 4px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-size: 0.68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
       color: var(--muted);
     }
-
     nav { flex: 1; overflow-y: auto; padding: 8px 12px; }
     nav::-webkit-scrollbar { width: 4px; }
     nav::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      color: var(--muted2);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      color: var(--muted2); text-decoration: none;
+      font-size: 0.9rem; font-weight: 400;
       transition: background var(--transition), color var(--transition);
-      margin-bottom: 2px;
-      position: relative;
+      margin-bottom: 2px; position: relative;
     }
     .nav-item i { width: 20px; text-align: center; font-size: 0.95rem; flex-shrink: 0; }
     .nav-item:hover { background: var(--surface2); color: var(--text); }
     .nav-item.active {
       background: rgba(124,106,255,0.12);
-      color: var(--accent);
-      font-weight: 500;
+      color: var(--accent); font-weight: 500;
     }
     .nav-item.active::before {
-      content: '';
-      position: absolute;
-      right: -12px;
+      content: ''; position: absolute; right: -12px;
       top: 50%; transform: translateY(-50%);
-      width: 3px; height: 60%;
-      background: var(--accent);
+      width: 3px; height: 60%; background: var(--accent);
       border-radius: 3px 0 0 3px;
     }
-
     .nav-badge {
-      margin-right: auto;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: 600;
-      padding: 2px 6px;
+      margin-right: auto; background: var(--accent); color: #fff;
+      font-size: 0.65rem; font-weight: 600; padding: 2px 6px;
       border-radius: 999px;
     }
 
-    .sidebar-footer {
-      border-top: 1px solid var(--border);
-      padding: 14px 12px;
-    }
+    .sidebar-footer { border-top: 1px solid var(--border); padding: 14px 12px; }
     .user-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background var(--transition);
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--transition);
     }
     .user-card:hover { background: var(--surface2); }
     .avatar {
-      width: 34px; height: 34px;
-      border-radius: 50%;
+      width: 34px; height: 34px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--purple));
-      display: grid;
-      place-items: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #fff;
-      flex-shrink: 0;
+      display: grid; place-items: center;
+      font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;
     }
     .user-info { flex: 1; min-width: 0; }
     .user-name { font-size: 0.85rem; font-weight: 500; color: var(--text); }
@@ -170,10 +131,8 @@
 
     /* ===== OVERLAY (mobile) ===== */
     .overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 99;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 99;
       backdrop-filter: blur(2px);
     }
     .overlay.show { display: block; }
@@ -181,9 +140,7 @@
     /* ===== MAIN ===== */
     .main {
       margin-right: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      flex: 1; display: flex; flex-direction: column;
       min-height: 100vh;
     }
 
@@ -191,507 +148,273 @@
     .topbar {
       height: var(--topbar-h);
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 28px;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(12,12,15,0.85);
-      backdrop-filter: blur(16px);
+      display: flex; align-items: center;
+      padding: 0 28px; gap: 16px;
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12,12,15,0.88); backdrop-filter: blur(16px);
     }
     .menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--muted2);
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 6px;
+      display: none; background: none; border: none;
+      color: var(--muted2); font-size: 1.1rem; cursor: pointer;
+      padding: 6px; border-radius: 6px;
       transition: color var(--transition), background var(--transition);
     }
     .menu-btn:hover { color: var(--text); background: var(--surface2); }
 
     .topbar-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.2px;
+      font-size: 1.05rem; font-weight: 600; color: var(--text);
     }
     .topbar-date {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-right: 4px;
+      font-size: 0.78rem; color: var(--muted); margin-right: 4px;
     }
 
     .search-bar {
       margin-right: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-sm);
-      padding: 7px 14px;
-      width: 220px;
-      transition: border-color var(--transition), width var(--transition);
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); padding: 7px 14px;
+      width: 220px; transition: border-color var(--transition), width var(--transition);
     }
     .search-bar:focus-within { border-color: var(--accent); width: 260px; }
     .search-bar i { color: var(--muted); font-size: 0.8rem; }
     .search-bar input {
-      background: none;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
-      width: 100%;
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: inherit;
+      font-size: 0.85rem; width: 100%;
     }
     .search-bar input::placeholder { color: var(--muted); }
 
     .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
     }
     .notif-btn {
-      position: relative;
-      width: 36px; height: 36px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      color: var(--muted2);
-      font-size: 0.85rem;
+      position: relative; width: 36px; height: 36px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); display: grid; place-items: center;
+      cursor: pointer; color: var(--muted2); font-size: 0.85rem;
       transition: color var(--transition), border-color var(--transition);
     }
     .notif-btn:hover { color: var(--text); border-color: var(--border2); }
     .notif-dot {
-      position: absolute;
-      top: 7px; left: 7px;
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      border: 1.5px solid var(--bg);
+      position: absolute; top: 7px; left: 7px;
+      width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; border: 1.5px solid var(--bg);
     }
     .topbar-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
+      width: 36px; height: 36px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--purple));
-      display: grid;
-      place-items: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      flex-shrink: 0;
-      border: 2px solid transparent;
-      transition: border-color var(--transition);
+      display: grid; place-items: center;
+      font-size: 0.78rem; font-weight: 700; color: #fff;
+      cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent; transition: border-color var(--transition);
     }
     .topbar-avatar:hover { border-color: var(--accent); }
 
     /* ===== CONTENT ===== */
-    .content {
-      flex: 1;
-      padding: 28px;
-      max-width: 1200px;
-      width: 100%;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: 0.78rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
-    .see-all {
-      font-size: 0.78rem;
-      color: var(--accent);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: opacity var(--transition);
-    }
-    .see-all:hover { opacity: 0.75; }
+    .content { flex: 1; padding: 24px 28px; max-width: 1400px; }
 
     /* ===== GREETING ===== */
     .greeting {
-      margin-bottom: 28px;
+      margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;
     }
     .greeting h1 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-      color: var(--text);
-      margin-bottom: 4px;
+      font-size: 1.6rem; font-weight: 600; letter-spacing: -0.5px;
     }
-    .greeting p {
-      font-size: 0.88rem;
-      color: var(--muted2);
-    }
+    .greeting p { color: var(--muted2); font-size: 0.9rem; margin-top: 4px; }
     .greeting .highlight { color: var(--accent); }
 
-    /* ===== OVERVIEW CARDS ===== */
-    .overview-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 28px;
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+      margin-bottom: 24px;
     }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      transition: border-color var(--transition), transform var(--transition);
-    }
-    .card:hover {
-      border-color: var(--border2);
-      transform: translateY(-2px);
-    }
-
     .stat-card {
-      position: relative;
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+      transition: transform var(--transition), border-color var(--transition);
     }
-    .stat-card::after {
-      content: '';
-      position: absolute;
-      top: -30px; left: -30px;
-      width: 90px; height: 90px;
-      border-radius: 50%;
-      opacity: 0.06;
-    }
-    .stat-card.tasks::after   { background: var(--blue); }
-    .stat-card.habits::after  { background: var(--green); }
-    .stat-card.goals::after   { background: var(--amber); }
-
-    .stat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .stat-header {
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 12px;
     }
     .stat-label {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--muted2);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-size: 0.8rem; font-weight: 500; color: var(--muted2);
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
     .stat-icon {
-      width: 32px; height: 32px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      font-size: 0.9rem;
+      width: 36px; height: 36px; border-radius: 8px;
+      display: grid; place-items: center; font-size: 1rem;
     }
-    .stat-icon.tasks  { background: rgba(96,165,250,0.12);  color: var(--blue); }
-    .stat-icon.habits { background: rgba(52,211,153,0.12);  color: var(--green); }
-    .stat-icon.goals  { background: rgba(251,191,36,0.12);  color: var(--amber); }
-
     .stat-value {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -1px;
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 4px;
+      font-size: 2rem; font-weight: 600; font-family: 'DM Mono', monospace;
+      color: var(--text); margin-bottom: 6px;
     }
-    .stat-sub {
-      font-size: 0.75rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .stat-sub .up   { color: var(--green); }
-    .stat-sub .down { color: var(--red); }
+    .stat-sub { font-size: 0.75rem; color: var(--muted); }
 
-    /* ===== MAIN GRID ===== */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 14px;
+    /* ===== DUAL COLUMN LAYOUT ===== */
+    .dashboard-grid {
+      display: grid; grid-template-columns: 1fr 340px; gap: 20px;
     }
+    .left-col { display: flex; flex-direction: column; gap: 20px; }
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
 
-    /* ===== TASKS ===== */
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 0.9rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--muted2);
+    }
+    .card-link {
+      font-size: 0.75rem; color: var(--accent); text-decoration: none;
+    }
+    .card-link:hover { opacity: 0.8; }
+
+    /* ===== TASKS LIST ===== */
     .task-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: opacity var(--transition);
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
     }
     .task-item:last-child { border-bottom: none; }
-
-    .checkbox {
-      width: 18px; height: 18px;
-      border: 1.5px solid var(--border2);
-      border-radius: 5px;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background var(--transition), border-color var(--transition);
-      font-size: 0.6rem;
-      color: transparent;
+    .task-check {
+      width: 18px; height: 18px; border: 1.5px solid var(--border2);
+      border-radius: 5px; cursor: pointer; display: grid; place-items: center;
+      color: transparent; transition: all var(--transition);
     }
-    .checkbox.checked {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
+    .task-check.checked {
+      background: var(--accent); border-color: var(--accent); color: #fff;
     }
-    .task-text {
-      flex: 1;
-      font-size: 0.88rem;
-      color: var(--text);
-      transition: color var(--transition);
-    }
-    .task-item.done .task-text {
-      color: var(--muted);
-      text-decoration: line-through;
-    }
-    .task-tag {
-      font-size: 0.68rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-weight: 500;
-    }
-    .task-tag.work    { background: rgba(96,165,250,0.12);  color: var(--blue); }
-    .task-tag.health  { background: rgba(52,211,153,0.12);  color: var(--green); }
-    .task-tag.learn   { background: rgba(167,139,250,0.12); color: var(--purple); }
-    .task-tag.finance { background: rgba(251,191,36,0.12);  color: var(--amber); }
-
-    .add-task-btn {
-      width: 100%;
-      margin-top: 12px;
-      padding: 9px;
-      background: none;
-      border: 1px dashed var(--border2);
-      border-radius: var(--radius-sm);
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 0.82rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: border-color var(--transition), color var(--transition), background var(--transition);
-    }
-    .add-task-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: rgba(124,106,255,0.04);
-    }
+    .task-text { flex: 1; font-size: 0.88rem; }
+    .task-text.done { color: var(--muted); text-decoration: line-through; }
 
     /* ===== HABITS ===== */
-    .habit-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+    .habit-row {
+      display: flex; align-items: center; gap: 10px; padding: 8px 0;
     }
-    .habit-item:last-child { border-bottom: none; }
-    .habit-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .habit-name {
-      flex: 1;
-      font-size: 0.88rem;
-      color: var(--text);
-    }
-    .habit-streak {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      margin-left: 10px;
-    }
-    .habit-check {
-      width: 30px; height: 30px;
-      border: 1.5px solid var(--border2);
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      color: var(--muted);
-      font-size: 0.75rem;
-      transition: background var(--transition), border-color var(--transition), color var(--transition);
-      flex-shrink: 0;
-    }
-    .habit-check.done {
-      background: rgba(52,211,153,0.12);
-      border-color: var(--green);
-      color: var(--green);
+    .habit-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .habit-name { flex: 1; font-size: 0.85rem; }
+    .habit-badge {
+      font-size: 0.7rem; padding: 2px 8px; border-radius: 999px;
+      background: var(--surface2); color: var(--muted);
     }
 
     /* ===== GOALS ===== */
-    .goal-item { margin-bottom: 18px; }
-    .goal-item:last-child { margin-bottom: 0; }
-    .goal-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
+    .goal-progress {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
     }
-    .goal-name { font-size: 0.88rem; color: var(--text); font-weight: 500; }
-    .goal-pct { font-size: 0.78rem; font-family: 'DM Mono', monospace; color: var(--muted2); }
+    .goal-info { flex: 1; }
+    .goal-title { font-size: 0.85rem; margin-bottom: 4px; }
     .progress-track {
-      height: 5px;
-      background: var(--surface3);
-      border-radius: 999px;
+      height: 5px; background: var(--surface3); border-radius: 999px;
       overflow: hidden;
     }
     .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.6s cubic-bezier(.4,0,.2,1);
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--purple));
     }
+
+    /* ===== FINANCE SUMMARY ===== */
+    .finance-summary {
+      display: flex; justify-content: space-between; margin-bottom: 12px;
+    }
+    .finance-item { text-align: center; }
+    .finance-label { font-size: 0.7rem; color: var(--muted); }
+    .finance-value { font-size: 1rem; font-weight: 600; font-family: 'DM Mono', monospace; }
+
+    .transaction-mini {
+      display: flex; align-items: center; gap: 8px; padding: 8px 0;
+      border-bottom: 1px solid var(--border); font-size: 0.8rem;
+    }
+    .transaction-mini .amount { margin-right: auto; font-family: 'DM Mono', monospace; }
+    .amount.income { color: var(--green); }
+    .amount.expense { color: var(--red); }
+
+    /* ===== NOTES PREVIEW ===== */
+    .note-preview-item {
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .note-preview-title { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
+    .note-preview-content {
+      font-size: 0.75rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ===== MINI CALENDAR ===== */
+    .week-strip {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+      margin-top: 8px;
+    }
+    .week-day {
+      text-align: center; padding: 8px 0; border-radius: var(--radius-sm);
+      background: var(--surface2); cursor: pointer;
+    }
+    .week-day.today { background: var(--accent); color: #fff; }
+    .week-day .dow { font-size: 0.6rem; text-transform: uppercase; }
+    .week-day .dom { font-size: 0.9rem; font-weight: 600; }
 
     /* ===== QUICK ACTIONS ===== */
     .quick-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
     }
     .qa-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background var(--transition), border-color var(--transition), transform var(--transition);
-      font-weight: 400;
+      padding: 10px; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text);
+      text-decoration: none; font-size: 0.8rem; display: flex;
+      align-items: center; gap: 8px; transition: all var(--transition);
     }
-    .qa-btn:hover {
-      background: var(--surface3);
-      border-color: var(--border2);
-      transform: translateX(-3px);
-    }
-    .qa-btn i { width: 16px; text-align: center; color: var(--accent); font-size: 0.85rem; }
-
-    /* ===== RIGHT COLUMN ===== */
-    .right-col { display: flex; flex-direction: column; gap: 14px; }
-
-    /* ===== MINI CALENDAR STRIP ===== */
-    .cal-strip {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-    .cal-day {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 8px 4px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background var(--transition);
-    }
-    .cal-day:hover { background: var(--surface3); }
-    .cal-day.today {
-      background: var(--accent);
-    }
-    .cal-day.today .cal-dname,
-    .cal-day.today .cal-dnum { color: #fff; }
-    .cal-dname { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
-    .cal-dnum { font-size: 0.9rem; font-weight: 600; color: var(--text); font-family: 'DM Mono', monospace; }
+    .qa-btn:hover { background: var(--surface3); border-color: var(--border2); }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
     @media (max-width: 900px) {
       .sidebar { transform: translateX(100%); }
       .sidebar.open { transform: translateX(0); box-shadow: -24px 0 60px rgba(0,0,0,0.5); }
       .main { margin-right: 0; }
       .menu-btn { display: grid; }
-      .main-grid { grid-template-columns: 1fr; }
-      .right-col { flex-direction: row; flex-wrap: wrap; }
-      .right-col .card { flex: 1 1 260px; }
-      .overview-grid { grid-template-columns: 1fr 1fr; }
-      .search-bar { width: 160px; }
-      .search-bar:focus-within { width: 190px; }
-    }
-    @media (max-width: 540px) {
-      .content { padding: 16px; }
-      .overview-grid { grid-template-columns: 1fr; }
-      .topbar { padding: 0 16px; }
       .search-bar { display: none; }
-      .greeting h1 { font-size: 1.3rem; }
+    }
+    @media (max-width: 600px) {
+      .content { padding: 16px; }
+      .topbar { padding: 0 16px; }
+      .stats-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- Sidebar (RTL محسّن) -->
+<!-- Sidebar (موحّد) -->
 <aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-logo">
     <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
     <span class="logo-text">Life<span>OS</span></span>
   </a>
-
   <nav>
     <div class="sidebar-section">الرئيسية</div>
-    <a href="index.html" class="nav-item active">
-      <i class="fa-solid fa-gauge-high"></i> لوحة التحكم
-    </a>
-    <a href="tasks.html" class="nav-item">
-      <i class="fa-solid fa-circle-check"></i> المهام
-      <span class="nav-badge" id="pendingTasksCount">0</span>
-    </a>
-    <a href="habits.html" class="nav-item">
-      <i class="fa-solid fa-fire-flame-curved"></i> العادات
-    </a>
-    <a href="goals.html" class="nav-item">
-      <i class="fa-solid fa-bullseye"></i> الأهداف
-    </a>
-    <a href="calendar.html" class="nav-item">
-      <i class="fa-regular fa-calendar"></i> التقويم
-    </a>
-
-    <div class="sidebar-section" style="margin-top:8px;">أدوات</div>
-    <a href="finance.html" class="nav-item">
-      <i class="fa-solid fa-wallet"></i> المالية
-    </a>
-    <a href="notes.html" class="nav-item">
-      <i class="fa-regular fa-note-sticky"></i> الملاحظات
-    </a>
-    <a href="settings.html" class="nav-item">
-      <i class="fa-solid fa-gear"></i> الإعدادات
-    </a>
+    <a href="index.html" class="nav-item active"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم</a>
+    <a href="tasks.html" class="nav-item"><i class="fa-solid fa-circle-check"></i> المهام <span class="nav-badge" id="pendingTasksBadge">0</span></a>
+    <a href="habits.html" class="nav-item"><i class="fa-solid fa-fire-flame-curved"></i> العادات</a>
+    <a href="goals.html" class="nav-item"><i class="fa-solid fa-bullseye"></i> الأهداف</a>
+    <a href="calendar.html" class="nav-item"><i class="fa-regular fa-calendar"></i> التقويم</a>
+    <div class="sidebar-section" style="margin-top:8px">أدوات</div>
+    <a href="finance.html" class="nav-item"><i class="fa-solid fa-wallet"></i> المالية</a>
+    <a href="notes.html" class="nav-item"><i class="fa-regular fa-note-sticky"></i> الملاحظات</a>
+    <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i> الإعدادات</a>
   </nav>
-
   <div class="sidebar-footer">
     <div class="user-card">
-      <div class="avatar">AO</div>
+      <div class="avatar" id="sidebarAvatar">AO</div>
       <div class="user-info">
-        <div class="user-name">أيت عمر</div>
+        <div class="user-name" id="sidebarUserName">أيت عمر</div>
         <div class="user-role">خطة مجانية</div>
       </div>
       <i class="fa-solid fa-ellipsis-vertical" style="color:var(--muted);font-size:.75rem"></i>
@@ -704,104 +427,155 @@
 <!-- Main -->
 <div class="main">
   <header class="topbar">
-    <button class="menu-btn" onclick="toggleSidebar()">
-      <i class="fa-solid fa-bars"></i>
-    </button>
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
     <div>
       <div class="topbar-title">لوحة التحكم</div>
       <div class="topbar-date" id="todayDate"></div>
     </div>
     <div class="search-bar">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="ابحث عن أي شيء..." disabled>
+      <input type="text" placeholder="بحث سريع... (قريباً)">
     </div>
     <div class="topbar-actions">
-      <div class="notif-btn">
-        <i class="fa-regular fa-bell"></i>
-        <span class="notif-dot"></span>
-      </div>
-      <div class="topbar-avatar">AO</div>
+      <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
+      <div class="topbar-avatar" id="topbarAvatar">AO</div>
     </div>
   </header>
 
   <div class="content">
     <!-- ترحيب -->
     <div class="greeting">
-      <h1>صباح الخير، <span class="highlight">أيت</span> 👋</h1>
-      <p>إليك ملخص يومك وما يحدث في حياتك.</p>
+      <div>
+        <h1>مرحباً بعودتك، <span class="highlight" id="greetingName">أيت</span> 👋</h1>
+        <p id="greetingMessage">إليك ملخص يومك.</p>
+      </div>
+      <div style="font-size:0.85rem; color:var(--muted2);">
+        <i class="fa-regular fa-calendar-check"></i> <span id="currentDateFull"></span>
+      </div>
     </div>
 
-    <!-- بطاقات النظرة العامة (ديناميكية) -->
-    <div class="section-header">
-      <span class="section-title">نظرة عامة</span>
-    </div>
-    <div class="overview-grid" id="overviewCards">
-      <!-- سيتم ملؤها عبر JavaScript -->
+    <!-- بطاقات الإحصائيات -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">المهام النشطة</span>
+          <div class="stat-icon" style="background:rgba(96,165,250,0.12); color:var(--blue)"><i class="fa-solid fa-list-check"></i></div>
+        </div>
+        <div class="stat-value" id="statActiveTasks">0</div>
+        <div class="stat-sub"><span id="statCompletedTasks">0</span> مكتملة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">عادات اليوم</span>
+          <div class="stat-icon" style="background:rgba(52,211,153,0.12); color:var(--green)"><i class="fa-solid fa-fire"></i></div>
+        </div>
+        <div class="stat-value" id="statHabitsDone">0/0</div>
+        <div class="stat-sub"><span id="statHabitsPercent">0%</span> إنجاز</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">الرصيد الحالي</span>
+          <div class="stat-icon" style="background:rgba(251,191,36,0.12); color:var(--amber)"><i class="fa-solid fa-wallet"></i></div>
+        </div>
+        <div class="stat-value" id="statBalance">0.00</div>
+        <div class="stat-sub">درهم مغربي</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-label">تقدم الأهداف</span>
+          <div class="stat-icon" style="background:rgba(124,106,255,0.12); color:var(--accent)"><i class="fa-solid fa-bullseye"></i></div>
+        </div>
+        <div class="stat-value" id="statGoalAvg">0%</div>
+        <div class="stat-sub"><span id="statActiveGoals">0</span> أهداف نشطة</div>
+      </div>
     </div>
 
     <!-- الشبكة الرئيسية -->
-    <div class="main-grid">
-      <div style="display:flex; flex-direction:column; gap:14px;">
-        <!-- معاينة المهام -->
-        <div class="card" id="tasksPreviewCard">
-          <div class="section-header">
-            <span class="section-title">المهام القادمة</span>
-            <a href="tasks.html" class="see-all">عرض الكل <i class="fa-solid fa-arrow-left" style="font-size:0.65rem"></i></a>
+    <div class="dashboard-grid">
+      <!-- العمود الأيسر -->
+      <div class="left-col">
+        <!-- المهام القادمة -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-regular fa-circle-check" style="margin-left:6px;"></i> المهام القادمة</span>
+            <a href="tasks.html" class="card-link">عرض الكل <i class="fa-solid fa-arrow-left"></i></a>
           </div>
           <div id="tasksPreviewList"></div>
-          <button class="add-task-btn" onclick="window.location.href='tasks.html'">
-            <i class="fa-solid fa-plus"></i> إضافة مهمة جديدة
-          </button>
         </div>
 
-        <!-- معاينة الأهداف -->
-        <div class="card" id="goalsPreviewCard">
-          <div class="section-header">
-            <span class="section-title">تقدم الأهداف</span>
-            <a href="goals.html" class="see-all">عرض الكل <i class="fa-solid fa-arrow-left" style="font-size:0.65rem"></i></a>
+        <!-- الأهداف النشطة -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-chart-line" style="margin-left:6px;"></i> الأهداف النشطة</span>
+            <a href="goals.html" class="card-link">عرض الكل <i class="fa-solid fa-arrow-left"></i></a>
           </div>
           <div id="goalsPreviewList"></div>
+        </div>
+
+        <!-- ملخص مالي -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-wallet" style="margin-left:6px;"></i> ملخص مالي سريع</span>
+            <a href="finance.html" class="card-link">المالية <i class="fa-solid fa-arrow-left"></i></a>
+          </div>
+          <div class="finance-summary">
+            <div class="finance-item">
+              <div class="finance-label">الدخل</div>
+              <div class="finance-value income" id="summaryIncome">0</div>
+            </div>
+            <div class="finance-item">
+              <div class="finance-label">المصروفات</div>
+              <div class="finance-value expense" id="summaryExpense">0</div>
+            </div>
+            <div class="finance-item">
+              <div class="finance-label">الرصيد</div>
+              <div class="finance-value" id="summaryBalance">0</div>
+            </div>
+          </div>
+          <div id="recentTransactions"></div>
         </div>
       </div>
 
       <!-- العمود الأيمن -->
       <div class="right-col">
-        <!-- شريط الأسبوع -->
+        <!-- العادات اليوم -->
         <div class="card">
-          <div class="section-header" style="margin-bottom:8px">
-            <span class="section-title">هذا الأسبوع</span>
-            <a href="calendar.html" class="see-all">التقويم <i class="fa-solid fa-arrow-left" style="font-size:0.65rem"></i></a>
-          </div>
-          <div class="cal-strip" id="calStrip"></div>
-        </div>
-
-        <!-- معاينة العادات -->
-        <div class="card" id="habitsPreviewCard">
-          <div class="section-header">
-            <span class="section-title">عادات اليوم</span>
-            <a href="habits.html" class="see-all">عرض الكل <i class="fa-solid fa-arrow-left" style="font-size:0.65rem"></i></a>
+          <div class="card-header">
+            <span class="card-title"><i class="fa-solid fa-fire-flame-curved" style="margin-left:6px;"></i> عادات اليوم</span>
+            <a href="habits.html" class="card-link">عرض الكل <i class="fa-solid fa-arrow-left"></i></a>
           </div>
           <div id="habitsPreviewList"></div>
         </div>
 
-        <!-- الإجراءات السريعة -->
+        <!-- تقويم مصغر -->
         <div class="card">
-          <div class="section-header" style="margin-bottom:8px">
-            <span class="section-title">إجراءات سريعة</span>
+          <div class="card-header">
+            <span class="card-title"><i class="fa-regular fa-calendar" style="margin-left:6px;"></i> هذا الأسبوع</span>
+            <a href="calendar.html" class="card-link">التقويم <i class="fa-solid fa-arrow-left"></i></a>
           </div>
+          <div class="week-strip" id="weekStrip"></div>
+          <div style="margin-top:12px; font-size:0.8rem; color:var(--muted2);" id="todayEventsPreview">لا توجد أحداث اليوم</div>
+        </div>
+
+        <!-- آخر الملاحظات -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fa-regular fa-note-sticky" style="margin-left:6px;"></i> آخر الملاحظات</span>
+            <a href="notes.html" class="card-link">عرض الكل <i class="fa-solid fa-arrow-left"></i></a>
+          </div>
+          <div id="notesPreviewList"></div>
+        </div>
+
+        <!-- إجراءات سريعة -->
+        <div class="card">
+          <div class="card-header"><span class="card-title">إجراءات سريعة</span></div>
           <div class="quick-actions">
-            <a href="tasks.html" class="qa-btn">
-              <i class="fa-solid fa-plus"></i> مهمة جديدة
-            </a>
-            <a href="habits.html" class="qa-btn">
-              <i class="fa-solid fa-fire-flame-curved"></i> عادة جديدة
-            </a>
-            <a href="notes.html" class="qa-btn">
-              <i class="fa-regular fa-note-sticky"></i> ملاحظة سريعة
-            </a>
-            <a href="finance.html" class="qa-btn">
-              <i class="fa-solid fa-money-bill-wave"></i> تسجيل مصروف
-            </a>
+            <a href="tasks.html" class="qa-btn"><i class="fa-solid fa-plus"></i> مهمة</a>
+            <a href="habits.html" class="qa-btn"><i class="fa-solid fa-fire"></i> عادة</a>
+            <a href="goals.html" class="qa-btn"><i class="fa-solid fa-bullseye"></i> هدف</a>
+            <a href="finance.html" class="qa-btn"><i class="fa-solid fa-money-bill"></i> معاملة</a>
+            <a href="notes.html" class="qa-btn"><i class="fa-regular fa-pen-to-square"></i> ملاحظة</a>
+            <a href="calendar.html" class="qa-btn"><i class="fa-regular fa-calendar-plus"></i> حدث</a>
           </div>
         </div>
       </div>
@@ -813,232 +587,209 @@
   (function() {
     "use strict";
 
-    // ---------- مفاتيح localStorage ----------
-    const TASKS_KEY  = 'lifeos_tasks';
-    const HABITS_KEY = 'lifeos_habits';
-    const GOALS_KEY  = 'lifeos_goals';
+    // ---------- UTILS ----------
+    const todayStr = () => new Date().toISOString().split('T')[0];
+    const getToday = () => todayStr();
 
-    // ---------- دوال مساعدة للتاريخ ----------
-    function getTodayStr() {
-      const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    function loadData(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch { return []; }
     }
 
-    // ---------- قراءة البيانات من localStorage ----------
-    function loadTasks() {
-      try {
-        return JSON.parse(localStorage.getItem(TASKS_KEY)) || [];
-      } catch { return []; }
-    }
+    // ---------- LOAD ALL DATA ----------
+    const tasks = loadData('lifeos_tasks');
+    const habits = loadData('lifeos_habits');
+    const goals = loadData('lifeos_goals');
+    const finance = loadData('lifeos_finance_v2');
+    const notesData = loadData('lifeos_notes_v2');
+    const calendar = loadData('lifeos_calendar');
+    const settings = JSON.parse(localStorage.getItem('lifeos_settings') || '{}');
 
-    function loadHabits() {
-      try {
-        return JSON.parse(localStorage.getItem(HABITS_KEY)) || [];
-      } catch { return []; }
-    }
+    // تحديث واجهة المستخدم بالإعدادات
+    const userName = settings.profile?.name || 'أيت عمر';
+    const firstName = userName.split(' ')[0];
+    document.getElementById('greetingName').textContent = firstName;
+    document.getElementById('sidebarUserName').textContent = firstName;
+    const avatarInitials = userName.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase() || 'AO';
+    document.getElementById('sidebarAvatar').textContent = avatarInitials;
+    document.getElementById('topbarAvatar').textContent = avatarInitials;
 
-    function loadGoals() {
-      try {
-        return JSON.parse(localStorage.getItem(GOALS_KEY)) || [];
-      } catch { return []; }
-    }
+    // تاريخ اليوم
+    const now = new Date();
+    const dateOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    document.getElementById('todayDate').textContent = now.toLocaleDateString('ar-EG', dateOpts);
+    document.getElementById('currentDateFull').textContent = now.toLocaleDateString('ar-EG', dateOpts);
 
-    // ---------- تحديث Dashboard بناءً على البيانات الحقيقية ----------
-    function updateDashboard() {
-      const tasks = loadTasks();
-      const habits = loadHabits();
-      const goals = loadGoals();
+    // رسالة ترحيب حسب الوقت
+    const hour = now.getHours();
+    let greetingMsg = '';
+    if (hour < 12) greetingMsg = '☀️ صباح الخير! إليك لمحة عن يومك.';
+    else if (hour < 18) greetingMsg = '🌤️ مساء الخير! تابع تقدمك.';
+    else greetingMsg = '🌙 ليلة سعيدة! راجع إنجازاتك.';
+    document.getElementById('greetingMessage').textContent = greetingMsg;
 
-      const pendingTasks = tasks.filter(t => !t.completed).length;
-      const completedTasks = tasks.filter(t => t.completed).length;
-      const totalTasks = tasks.length;
+    // ---------- STATS CARDS ----------
+    const activeTasks = tasks.filter(t => !t.completed).length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    document.getElementById('statActiveTasks').textContent = activeTasks;
+    document.getElementById('statCompletedTasks').textContent = completedTasks;
+    document.getElementById('pendingTasksBadge').textContent = activeTasks;
 
-      // تحديث شارة المهام في Sidebar
-      const badge = document.getElementById('pendingTasksCount');
-      if (badge) badge.textContent = pendingTasks;
+    const today = getToday();
+    const habitsDoneToday = habits.filter(h => h.dates?.includes(today)).length;
+    const totalHabits = habits.length;
+    const habitsPercent = totalHabits ? Math.round((habitsDoneToday / totalHabits) * 100) : 0;
+    document.getElementById('statHabitsDone').textContent = `${habitsDoneToday}/${totalHabits}`;
+    document.getElementById('statHabitsPercent').textContent = `${habitsPercent}%`;
 
-      // --- بطاقات النظرة العامة (Overview Cards) ---
-      const todayStr = getTodayStr();
-      const habitsDoneToday = habits.filter(h => h.dates && h.dates.includes(todayStr)).length;
-      const totalHabits = habits.length;
-      const habitsPercentage = totalHabits ? Math.round((habitsDoneToday / totalHabits) * 100) : 0;
+    // Finance summary
+    const nowMonth = now.getMonth(); const nowYear = now.getFullYear();
+    const monthTx = (finance || []).filter(t => {
+      const d = new Date(t.date); return d.getMonth() === nowMonth && d.getFullYear() === nowYear;
+    });
+    const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const expense = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    const balance = income - expense;
+    document.getElementById('statBalance').textContent = balance.toFixed(0) + ' د.م';
+    document.getElementById('summaryIncome').textContent = income.toFixed(0);
+    document.getElementById('summaryExpense').textContent = expense.toFixed(0);
+    document.getElementById('summaryBalance').textContent = balance.toFixed(0);
 
-      const totalGoals = goals.length;
-      const avgProgress = totalGoals ? Math.round(goals.reduce((sum, g) => sum + (g.progress || 0), 0) / totalGoals) : 0;
+    const goalAvg = goals.length ? Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length) : 0;
+    document.getElementById('statGoalAvg').textContent = goalAvg + '%';
+    document.getElementById('statActiveGoals').textContent = goals.length;
 
-      const overviewHTML = `
-        <div class="card stat-card tasks">
-          <div class="stat-top">
-            <span class="stat-label">مهام اليوم</span>
-            <div class="stat-icon tasks"><i class="fa-solid fa-list-check"></i></div>
-          </div>
-          <div class="stat-value">${pendingTasks}</div>
-          <div class="stat-sub">
-            <i class="fa-solid ${pendingTasks > 0 ? 'fa-arrow-trend-up up' : 'fa-minus'}"></i>
-            <span>${completedTasks} مكتملة · ${pendingTasks} متبقية</span>
-          </div>
+    // ---------- TASKS PREVIEW ----------
+    const tasksPreview = document.getElementById('tasksPreviewList');
+    const pendingTasks = tasks.filter(t => !t.completed).slice(0, 4);
+    if (pendingTasks.length === 0) {
+      tasksPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">🎉 لا توجد مهام نشطة</div>';
+    } else {
+      tasksPreview.innerHTML = pendingTasks.map(t => `
+        <div class="task-item">
+          <div class="task-check" onclick="toggleTaskFromDashboard(${t.id})"></div>
+          <span class="task-text">${escapeHtml(t.text)}</span>
         </div>
-        <div class="card stat-card habits">
-          <div class="stat-top">
-            <span class="stat-label">عادات مكتملة</span>
-            <div class="stat-icon habits"><i class="fa-solid fa-fire"></i></div>
+      `).join('');
+    }
+
+    window.toggleTaskFromDashboard = function(id) {
+      let tasksArr = loadData('lifeos_tasks');
+      const task = tasksArr.find(t => t.id === id);
+      if (task) { task.completed = !task.completed; localStorage.setItem('lifeos_tasks', JSON.stringify(tasksArr)); }
+      location.reload();
+    };
+
+    // ---------- HABITS PREVIEW ----------
+    const habitsPreview = document.getElementById('habitsPreviewList');
+    if (habits.length === 0) {
+      habitsPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">✨ لا توجد عادات</div>';
+    } else {
+      habitsPreview.innerHTML = habits.slice(0, 4).map(h => {
+        const done = h.dates?.includes(today);
+        return `
+          <div class="habit-row">
+            <div class="habit-dot" style="background:${h.color || '#7c6aff'}"></div>
+            <span class="habit-name" style="${done ? 'text-decoration:line-through;color:var(--muted)' : ''}">${escapeHtml(h.name)}</span>
+            <span class="habit-badge">${h.streak || 0} 🔥</span>
+            ${!done ? `<i class="fa-regular fa-circle-check" style="color:var(--muted);cursor:pointer;" onclick="markHabitFromDashboard(${h.id})"></i>` : '<i class="fa-solid fa-circle-check" style="color:var(--green)"></i>'}
           </div>
-          <div class="stat-value">${habitsDoneToday}/${totalHabits}</div>
-          <div class="stat-sub">
-            <i class="fa-solid fa-arrow-trend-up up"></i>
-            <span><span class="up">${habitsPercentage}%</span> معدل الإنجاز</span>
+        `;
+      }).join('');
+    }
+
+    window.markHabitFromDashboard = function(id) {
+      let habitsArr = loadData('lifeos_habits');
+      const habit = habitsArr.find(h => h.id === id);
+      if (habit && !habit.dates) habit.dates = [];
+      if (habit && !habit.dates.includes(today)) {
+        habit.dates.push(today);
+        habit.streak = (habit.streak || 0) + 1;
+        localStorage.setItem('lifeos_habits', JSON.stringify(habitsArr));
+      }
+      location.reload();
+    };
+
+    // ---------- GOALS PREVIEW ----------
+    const goalsPreview = document.getElementById('goalsPreviewList');
+    if (goals.length === 0) {
+      goalsPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">🎯 لا توجد أهداف</div>';
+    } else {
+      goalsPreview.innerHTML = goals.slice(0, 3).map(g => `
+        <div class="goal-progress">
+          <div class="goal-info">
+            <div class="goal-title">${escapeHtml(g.title)}</div>
+            <div class="progress-track"><div class="progress-fill" style="width:${g.progress || 0}%"></div></div>
           </div>
+          <span style="font-family:'DM Mono'; font-size:0.8rem;">${g.progress || 0}%</span>
         </div>
-        <div class="card stat-card goals">
-          <div class="stat-top">
-            <span class="stat-label">تقدم الأهداف</span>
-            <div class="stat-icon goals"><i class="fa-solid fa-chart-line"></i></div>
-          </div>
-          <div class="stat-value">${avgProgress}%</div>
-          <div class="stat-sub">
-            <i class="fa-solid fa-clock" style="color:var(--amber)"></i>
-            <span>عبر <span style="color:var(--text)">${totalGoals} أهداف نشطة</span></span>
-          </div>
+      `).join('');
+    }
+
+    // ---------- FINANCE RECENT ----------
+    const recentTx = (finance || []).sort((a, b) => b.date - a.date).slice(0, 3);
+    const txContainer = document.getElementById('recentTransactions');
+    if (recentTx.length === 0) {
+      txContainer.innerHTML = '<div style="color:var(--muted);text-align:center;padding:10px;">لا توجد معاملات</div>';
+    } else {
+      txContainer.innerHTML = recentTx.map(t => `
+        <div class="transaction-mini">
+          <span>${escapeHtml(t.description)}</span>
+          <span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(0)} د.م</span>
+        </div>
+      `).join('');
+    }
+
+    // ---------- NOTES PREVIEW ----------
+    const notesPreview = document.getElementById('notesPreviewList');
+    const allNotes = notesData.notes || [];
+    const recentNotes = allNotes.sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3);
+    if (recentNotes.length === 0) {
+      notesPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">📝 لا توجد ملاحظات</div>';
+    } else {
+      notesPreview.innerHTML = recentNotes.map(n => `
+        <div class="note-preview-item">
+          <div class="note-preview-title">${escapeHtml(n.title || 'بدون عنوان')}</div>
+          <div class="note-preview-content">${escapeHtml((n.content || '').replace(/<[^>]*>/g, ' ').substring(0, 40))}</div>
+        </div>
+      `).join('');
+    }
+
+    // ---------- WEEK STRIP & CALENDAR EVENTS ----------
+    const weekStrip = document.getElementById('weekStrip');
+    const daysAr = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+    const todayIndex = now.getDay();
+    let weekHtml = '';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now); d.setDate(now.getDate() - todayIndex + i);
+      const isToday = i === todayIndex;
+      weekHtml += `
+        <div class="week-day ${isToday ? 'today' : ''}" onclick="window.location.href='calendar.html'">
+          <div class="dow">${daysAr[i].substring(0,3)}</div>
+          <div class="dom">${d.getDate()}</div>
         </div>
       `;
-      document.getElementById('overviewCards').innerHTML = overviewHTML;
+    }
+    weekStrip.innerHTML = weekHtml;
 
-      // --- معاينة المهام (أول 5 مهام غير مكتملة) ---
-      const activeTasks = tasks.filter(t => !t.completed).slice(0, 5);
-      const tasksPreviewList = document.getElementById('tasksPreviewList');
-      if (activeTasks.length === 0) {
-        tasksPreviewList.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.85rem;">🎉 لا توجد مهام نشطة</div>`;
-      } else {
-        tasksPreviewList.innerHTML = activeTasks.map(task => `
-          <div class="task-item" data-id="${task.id}">
-            <div class="checkbox" onclick="toggleTaskDirect(${task.id})"><i class="fa-solid fa-check"></i></div>
-            <span class="task-text">${escapeHtml(task.text)}</span>
-            <span class="task-tag work">مهمة</span>
-          </div>
-        `).join('');
-      }
+    const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const todayEvents = calendar[todayKey] || {};
+    const eventsList = Object.entries(todayEvents).map(([hour, text]) => `${hour}:00 - ${text}`).join(' · ');
+    document.getElementById('todayEventsPreview').textContent = eventsList || 'لا توجد أحداث اليوم';
 
-      // --- معاينة العادات (أول 5 عادات مع حالة اليوم) ---
-      const habitsPreviewList = document.getElementById('habitsPreviewList');
-      if (habits.length === 0) {
-        habitsPreviewList.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.85rem;">✨ لا توجد عادات بعد</div>`;
-      } else {
-        const previewHabits = habits.slice(0, 5);
-        habitsPreviewList.innerHTML = previewHabits.map(habit => {
-          const doneToday = habit.dates && habit.dates.includes(todayStr);
-          const streak = habit.streak || 0;
-          return `
-            <div class="habit-item">
-              <div class="habit-dot" style="background:${getHabitColor(habit.id)}"></div>
-              <span class="habit-name">${escapeHtml(habit.name)}</span>
-              <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-left:3px"></i>${streak}</span>
-              <div class="habit-check ${doneToday ? 'done' : ''}" onclick="toggleHabitDirect(${habit.id})">
-                <i class="fa-solid fa-check"></i>
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // --- معاينة الأهداف (أول 3 أهداف) ---
-      const goalsPreviewList = document.getElementById('goalsPreviewList');
-      if (goals.length === 0) {
-        goalsPreviewList.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.85rem;">🎯 لا توجد أهداف بعد</div>`;
-      } else {
-        const previewGoals = goals.slice(0, 3);
-        goalsPreviewList.innerHTML = previewGoals.map(goal => `
-          <div class="goal-item">
-            <div class="goal-top">
-              <span class="goal-name">${escapeHtml(goal.title)}</span>
-              <span class="goal-pct">${goal.progress || 0}%</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-fill" style="width:${goal.progress || 0}%; background: linear-gradient(90deg, var(--blue), var(--purple));"></div>
-            </div>
-          </div>
-        `).join('');
-      }
+    // ---------- HELPERS ----------
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
     }
 
-    // دالة مساعدة لتوليد لون ثابت للعادة بناءً على id
-    function getHabitColor(id) {
-      const colors = ['#34d399', '#60a5fa', '#a78bfa', '#f87171', '#fbbf24'];
-      return colors[id % colors.length];
-    }
-
-    // دالة escapeHtml
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // ---------- وظائف تفاعلية مباشرة من Dashboard (تحديث localStorage) ----------
-    window.toggleTaskDirect = function(taskId) {
-      let tasks = loadTasks();
-      const task = tasks.find(t => t.id === taskId);
-      if (task) {
-        task.completed = !task.completed;
-        localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-        updateDashboard(); // إعادة رسم Dashboard
-      }
-    };
-
-    window.toggleHabitDirect = function(habitId) {
-      let habits = loadHabits();
-      const habit = habits.find(h => h.id === habitId);
-      if (!habit) return;
-      const todayStr = getTodayStr();
-      if (!habit.dates) habit.dates = [];
-      if (!habit.dates.includes(todayStr)) {
-        habit.dates.push(todayStr);
-        habit.streak = (habit.streak || 0) + 1;
-      } else {
-        // إلغاء التحديد (اختياري)
-        habit.dates = habit.dates.filter(d => d !== todayStr);
-        habit.streak = Math.max(0, (habit.streak || 0) - 1);
-      }
-      localStorage.setItem(HABITS_KEY, JSON.stringify(habits));
-      updateDashboard();
-    };
-
-    // ---------- عرض التاريخ في الـ Topbar ----------
-    function displayTopbarDate() {
-      const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-      const now = new Date();
-      document.getElementById('todayDate').textContent = now.toLocaleDateString('ar-EG', opts);
-    }
-
-    // ---------- شريط الأسبوع المصغر ----------
-    function renderWeekStrip() {
-      const strip = document.getElementById('calStrip');
-      const daysAr = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-      const now = new Date();
-      const todayIndex = now.getDay(); // 0 = Sunday
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(now);
-        d.setDate(now.getDate() - todayIndex + i);
-        const dayEl = document.createElement('div');
-        dayEl.className = 'cal-day' + (i === todayIndex ? ' today' : '');
-        dayEl.innerHTML = `<span class="cal-dname">${daysAr[i].substring(0,3)}</span><span class="cal-dnum">${d.getDate()}</span>`;
-        strip.appendChild(dayEl);
-      }
-    }
-
-    // ---------- Sidebar Toggle ----------
-    window.toggleSidebar = function() {
+    window.toggleSidebar = () => {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('show');
     };
-    window.closeSidebar = function() {
+    window.closeSidebar = () => {
       document.getElementById('sidebar').classList.remove('open');
       document.getElementById('overlay').classList.remove('show');
     };
-
-    // ---------- التهيئة ----------
-    displayTopbarDate();
-    renderWeekStrip();
-    updateDashboard();
   })();
 </script>
 </body>
