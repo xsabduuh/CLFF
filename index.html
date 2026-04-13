@@ -368,7 +368,7 @@
 </head>
 <body>
 
-<!-- الشريط الجانبي (نفس الهيكل السابق) -->
+<!-- الشريط الجانبي -->
 <aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-logo">
     <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
@@ -396,7 +396,7 @@
 
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<!-- المحتوى الرئيسي (الهيكل مطابق للنسخة السابقة مع تغييرات طفيفة للأيقونات) -->
+<!-- المحتوى الرئيسي -->
 <div class="main">
   <header class="topbar">
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
@@ -509,16 +509,249 @@
 </div>
 
 <script>
-  // نفس كود JavaScript السابق (ديناميكي ومتوافق مع الإعدادات)
-  // ... (انسخ الكود الذي كتبناه في الرد السابق كاملاً، فهو يعمل بنفس المحددات)
-  // سأضع نسخة مختصرة للتوضيح، لكن في التطبيق الفعلي استخدم الكود الكامل السابق.
   (function() {
-    // الكود مطابق للنسخة السابقة التي تتعامل مع localStorage والإعدادات.
-    // لأغراض العرض، سأضع هيكلاً أساسياً، لكن يفضل نسخ الكود كاملاً.
-    console.log("تم تحميل لوحة التحكم بتصميم إبداعي.");
-    // ... (الكود الكامل من الرد السابق)
+    "use strict";
+
+    // ---------- إعدادات المستخدم (من localStorage) ----------
+    const SETTINGS_KEY = 'lifeos_settings';
+    let appSettings = {
+      profile: { name: 'أيت عمر', email: 'ait.omar@example.com', avatarColor: 'default' },
+      preferences: { language: 'ar', currency: 'MAD', dateFormat: 'ar-EG' },
+      appearance: { accentColor: '#a277ff' },
+      notifications: { enabled: true }
+    };
+
+    try {
+      const stored = localStorage.getItem(SETTINGS_KEY);
+      if (stored) appSettings = JSON.parse(stored);
+    } catch(e) { /* استخدام الإعدادات الافتراضية */ }
+
+    // تطبيق الإعدادات على الواجهة
+    function applySettings() {
+      // لون التمييز
+      document.documentElement.style.setProperty('--accent', appSettings.appearance.accentColor);
+
+      // الملف الشخصي
+      const fullName = appSettings.profile.name;
+      const firstName = fullName.split(' ')[0];
+      document.getElementById('greetingName').textContent = firstName;
+      document.getElementById('sidebarUserName').textContent = firstName;
+      const initials = fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() || 'AO';
+      document.getElementById('sidebarAvatar').textContent = initials;
+      document.getElementById('topbarAvatar').textContent = initials;
+
+      // العملة
+      const currencyMap = { MAD: 'درهم مغربي', USD: 'دولار أمريكي', EUR: 'يورو' };
+      const symbolMap = { MAD: 'د.م', USD: '$', EUR: '€' };
+      const currencyName = currencyMap[appSettings.preferences.currency] || 'درهم مغربي';
+      window.currencySymbol = symbolMap[appSettings.preferences.currency] || 'د.م';
+      document.getElementById('statCurrencyLabel').textContent = currencyName;
+
+      // تنسيق التاريخ
+      window.dateLocale = appSettings.preferences.dateFormat || 'ar-EG';
+      window.dateOptions = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+
+      // الإشعارات
+      const bell = document.querySelector('.notif-btn');
+      if (!appSettings.notifications.enabled) {
+        bell.style.opacity = '0.5';
+        bell.title = 'الإشعارات معطلة';
+      }
+    }
+    applySettings();
+
+    // ---------- تحديث التواريخ بالواجهة ----------
+    const now = new Date();
+    document.getElementById('todayDate').textContent = now.toLocaleDateString(window.dateLocale, window.dateOptions);
+    document.getElementById('currentDateFull').textContent = now.toLocaleDateString(window.dateLocale, window.dateOptions);
+
+    // رسالة ترحيب حسب الوقت
+    const hour = now.getHours();
+    let greetingMsg = '';
+    if (hour < 12) greetingMsg = '☀️ صباح الخير! إليك لمحة عن يومك.';
+    else if (hour < 18) greetingMsg = '🌤️ مساء الخير! تابع تقدمك.';
+    else greetingMsg = '🌙 ليلة سعيدة! راجع إنجازاتك.';
+    document.getElementById('greetingMessage').textContent = greetingMsg;
+
+    // ---------- دوال مساعدة ----------
+    const todayStr = () => now.toISOString().split('T')[0];
+    const getToday = () => todayStr();
+
+    function loadData(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch { return []; }
+    }
+
+    function formatMoney(amount) {
+      return `${amount.toFixed(0)} ${window.currencySymbol}`;
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+    }
+
+    // ---------- تحميل البيانات ----------
+    const tasks = loadData('lifeos_tasks');
+    const habits = loadData('lifeos_habits');
+    const goals = loadData('lifeos_goals');
+    const finance = loadData('lifeos_finance_v2');
+    const notesData = loadData('lifeos_notes_v2');
+    const calendar = loadData('lifeos_calendar');
+
+    // ---------- STATS CARDS ----------
+    const activeTasks = tasks.filter(t => !t.completed).length;
+    const completedTasks = tasks.filter(t => t.completed).length;
+    document.getElementById('statActiveTasks').textContent = activeTasks;
+    document.getElementById('statCompletedTasks').textContent = completedTasks;
+    document.getElementById('pendingTasksBadge').textContent = activeTasks;
+
+    const today = getToday();
+    const habitsDoneToday = habits.filter(h => h.dates?.includes(today)).length;
+    const totalHabits = habits.length;
+    const habitsPercent = totalHabits ? Math.round((habitsDoneToday / totalHabits) * 100) : 0;
+    document.getElementById('statHabitsDone').textContent = `${habitsDoneToday}/${totalHabits}`;
+    document.getElementById('statHabitsPercent').textContent = `${habitsPercent}%`;
+
+    // المالية (الشهر الحالي)
+    const nowMonth = now.getMonth(); const nowYear = now.getFullYear();
+    const monthTx = (finance || []).filter(t => {
+      const d = new Date(t.date); return d.getMonth() === nowMonth && d.getFullYear() === nowYear;
+    });
+    const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+    const expense = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+    const balance = income - expense;
+    document.getElementById('statBalance').textContent = formatMoney(balance);
+    document.getElementById('summaryIncome').textContent = formatMoney(income);
+    document.getElementById('summaryExpense').textContent = formatMoney(expense);
+    document.getElementById('summaryBalance').textContent = formatMoney(balance);
+
+    const goalAvg = goals.length ? Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length) : 0;
+    document.getElementById('statGoalAvg').textContent = goalAvg + '%';
+    document.getElementById('statActiveGoals').textContent = goals.length;
+
+    // ---------- TASKS PREVIEW ----------
+    const tasksPreview = document.getElementById('tasksPreviewList');
+    const pendingTasks = tasks.filter(t => !t.completed).slice(0, 4);
+    if (pendingTasks.length === 0) {
+      tasksPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">🎉 لا توجد مهام نشطة</div>';
+    } else {
+      tasksPreview.innerHTML = pendingTasks.map(t => `
+        <div class="task-item">
+          <div class="task-check" onclick="toggleTaskFromDashboard(${t.id})"></div>
+          <span class="task-text">${escapeHtml(t.text)}</span>
+        </div>
+      `).join('');
+    }
+
+    window.toggleTaskFromDashboard = function(id) {
+      let tasksArr = loadData('lifeos_tasks');
+      const task = tasksArr.find(t => t.id === id);
+      if (task) { task.completed = !task.completed; localStorage.setItem('lifeos_tasks', JSON.stringify(tasksArr)); }
+      location.reload();
+    };
+
+    // ---------- HABITS PREVIEW ----------
+    const habitsPreview = document.getElementById('habitsPreviewList');
+    if (habits.length === 0) {
+      habitsPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">✨ لا توجد عادات</div>';
+    } else {
+      habitsPreview.innerHTML = habits.slice(0, 4).map(h => {
+        const done = h.dates?.includes(today);
+        return `
+          <div class="habit-row">
+            <div class="habit-dot" style="background:${h.color || '#a277ff'}"></div>
+            <span class="habit-name" style="${done ? 'text-decoration:line-through;color:var(--muted)' : ''}">${escapeHtml(h.name)}</span>
+            <span class="habit-badge">${h.streak || 0} 🔥</span>
+            ${!done ? `<i class="fa-regular fa-circle-check" style="color:var(--muted);cursor:pointer;" onclick="markHabitFromDashboard(${h.id})"></i>` : '<i class="fa-solid fa-circle-check" style="color:var(--green)"></i>'}
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.markHabitFromDashboard = function(id) {
+      let habitsArr = loadData('lifeos_habits');
+      const habit = habitsArr.find(h => h.id === id);
+      if (habit && !habit.dates) habit.dates = [];
+      if (habit && !habit.dates.includes(today)) {
+        habit.dates.push(today);
+        habit.streak = (habit.streak || 0) + 1;
+        localStorage.setItem('lifeos_habits', JSON.stringify(habitsArr));
+      }
+      location.reload();
+    };
+
+    // ---------- GOALS PREVIEW ----------
+    const goalsPreview = document.getElementById('goalsPreviewList');
+    if (goals.length === 0) {
+      goalsPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">🎯 لا توجد أهداف</div>';
+    } else {
+      goalsPreview.innerHTML = goals.slice(0, 3).map(g => `
+        <div class="goal-progress">
+          <div class="goal-info">
+            <div class="goal-title">${escapeHtml(g.title)}</div>
+            <div class="progress-track"><div class="progress-fill" style="width:${g.progress || 0}%"></div></div>
+          </div>
+          <span style="font-family:'DM Mono'; font-size:0.8rem;">${g.progress || 0}%</span>
+        </div>
+      `).join('');
+    }
+
+    // ---------- FINANCE RECENT ----------
+    const recentTx = (finance || []).sort((a, b) => b.date - a.date).slice(0, 3);
+    const txContainer = document.getElementById('recentTransactions');
+    if (recentTx.length === 0) {
+      txContainer.innerHTML = '<div style="color:var(--muted);text-align:center;padding:10px;">لا توجد معاملات</div>';
+    } else {
+      txContainer.innerHTML = recentTx.map(t => `
+        <div class="transaction-mini">
+          <span>${escapeHtml(t.description)}</span>
+          <span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatMoney(t.amount)}</span>
+        </div>
+      `).join('');
+    }
+
+    // ---------- NOTES PREVIEW ----------
+    const notesPreview = document.getElementById('notesPreviewList');
+    const allNotes = notesData.notes || [];
+    const recentNotes = allNotes.sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3);
+    if (recentNotes.length === 0) {
+      notesPreview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">📝 لا توجد ملاحظات</div>';
+    } else {
+      notesPreview.innerHTML = recentNotes.map(n => `
+        <div class="note-preview-item">
+          <div class="note-preview-title">${escapeHtml(n.title || 'بدون عنوان')}</div>
+          <div class="note-preview-content">${escapeHtml((n.content || '').replace(/<[^>]*>/g, ' ').substring(0, 40))}</div>
+        </div>
+      `).join('');
+    }
+
+    // ---------- WEEK STRIP & CALENDAR EVENTS ----------
+    const weekStrip = document.getElementById('weekStrip');
+    const daysAr = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+    const todayIndex = now.getDay();
+    let weekHtml = '';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now); d.setDate(now.getDate() - todayIndex + i);
+      const isToday = i === todayIndex;
+      weekHtml += `<div class="week-day ${isToday ? 'today' : ''}" onclick="window.location.href='calendar.html'"><div class="dow">${daysAr[i].substring(0,3)}</div><div class="dom">${d.getDate()}</div></div>`;
+    }
+    weekStrip.innerHTML = weekHtml;
+
+    const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+    const todayEvents = calendar[todayKey] || {};
+    const eventsList = Object.entries(todayEvents).map(([hour, text]) => `${hour}:00 - ${text}`).join(' · ');
+    document.getElementById('todayEventsPreview').textContent = eventsList || 'لا توجد أحداث اليوم';
+
+    // ---------- SIDEBAR TOGGLE ----------
+    window.toggleSidebar = () => {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    };
+    window.closeSidebar = () => {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    };
   })();
 </script>
-<!-- ملاحظة: لضمان عمل الصفحة بشكل كامل، انسخ كود JavaScript من الرد السابق (الذي فيه تطبيق الإعدادات وقراءة البيانات) -->
 </body>
 </html>
