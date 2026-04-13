@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeOS — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–bg:        #0c0c0f;
+–surface:   #111115;
+–surface2:  #18181e;
+–surface3:  #1f1f27;
+–border:    rgba(255,255,255,0.06);
+–border2:   rgba(255,255,255,0.10);
+–text:      #e8e8f0;
+–muted:     #6b6b80;
+–muted2:    #9090a8;
+–accent:    #7c6aff;
+–accent2:   #5e4de8;
+–green:     #34d399;
+–amber:     #fbbf24;
+–red:       #f87171;
+–blue:      #60a5fa;
+–sidebar-w: 240px;
+–topbar-h:  64px;
+–radius:    12px;
+–radius-sm: 8px;
+–transition: 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+html { font-size: 15px; }
+body {
+font-family: ‘DM Sans’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+display: flex;
+overflow-x: hidden;
+}
+
+/* ─── SIDEBAR ─────────────────────────────────────────── */
+.sidebar {
+width: var(–sidebar-w);
+background: var(–surface);
+border-right: 1px solid var(–border);
+display: flex;
+flex-direction: column;
+position: fixed;
+top: 0; left: 0;
+height: 100vh;
+z-index: 100;
+transition: transform var(–transition);
+}
+
+.sidebar-logo {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 22px 20px 18px;
+border-bottom: 1px solid var(–border);
+}
+.logo-icon {
+width: 32px; height: 32px;
+background: var(–accent);
+border-radius: 8px;
+display: grid;
+place-items: center;
+font-size: 14px;
+color: #fff;
+flex-shrink: 0;
+}
+.logo-text {
+font-size: 1rem;
+font-weight: 600;
+letter-spacing: -0.3px;
+color: var(–text);
+}
+.logo-text span { color: var(–accent); }
+
+.sidebar-section {
+padding: 14px 12px 4px;
+font-size: 0.68rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
+color: var(–muted);
+}
+
+nav { flex: 1; overflow-y: auto; padding: 8px 12px; }
+nav::-webkit-scrollbar { width: 4px; }
+nav::-webkit-scrollbar-thumb { background: var(–surface3); border-radius: 4px; }
+
+.nav-item {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 9px 12px;
+border-radius: var(–radius-sm);
+color: var(–muted2);
+text-decoration: none;
+font-size: 0.9rem;
+font-weight: 400;
+transition: background var(–transition), color var(–transition);
+margin-bottom: 2px;
+position: relative;
+}
+.nav-item i { width: 16px; text-align: center; font-size: 0.85rem; flex-shrink: 0; }
+.nav-item:hover { background: var(–surface2); color: var(–text); }
+.nav-item.active {
+background: rgba(124,106,255,0.12);
+color: var(–accent);
+font-weight: 500;
+}
+.nav-item.active::before {
+content: ‘’;
+position: absolute;
+left: -12px;
+top: 50%; transform: translateY(-50%);
+width: 3px; height: 60%;
+background: var(–accent);
+border-radius: 0 3px 3px 0;
+}
+.nav-badge {
+margin-left: auto;
+background: var(–accent);
+color: #fff;
+font-size: 0.65rem;
+font-weight: 600;
+padding: 1px 6px;
+border-radius: 999px;
+}
+
+.sidebar-footer {
+border-top: 1px solid var(–border);
+padding: 14px 12px;
+}
+.user-card {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px 10px;
+border-radius: var(–radius-sm);
+cursor: pointer;
+transition: background var(–transition);
+}
+.user-card:hover { background: var(–surface2); }
+.avatar {
+width: 34px; height: 34px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–accent), #a78bfa);
+display: grid;
+place-items: center;
+font-size: 0.75rem;
+font-weight: 700;
+color: #fff;
+flex-shrink: 0;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 0.85rem; font-weight: 500; color: var(–text); }
+.user-role { font-size: 0.72rem; color: var(–muted); }
+.user-card i { color: var(–muted); font-size: 0.75rem; }
+
+/* ─── OVERLAY (mobile) ─────────────────────────────────── */
+.overlay {
+display: none;
+position: fixed; inset: 0;
+background: rgba(0,0,0,0.6);
+z-index: 99;
+backdrop-filter: blur(2px);
+}
+.overlay.show { display: block; }
+
+/* ─── MAIN ─────────────────────────────────────────────── */
+.main {
+margin-left: var(–sidebar-w);
+flex: 1;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+/* ─── TOPBAR ───────────────────────────────────────────── */
+.topbar {
+height: var(–topbar-h);
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+padding: 0 28px;
+gap: 16px;
+position: sticky;
+top: 0;
+z-index: 50;
+background: rgba(12,12,15,0.85);
+backdrop-filter: blur(16px);
+}
+.menu-btn {
+display: none;
+background: none;
+border: none;
+color: var(–muted2);
+font-size: 1.1rem;
+cursor: pointer;
+padding: 6px;
+border-radius: 6px;
+transition: color var(–transition), background var(–transition);
+}
+.menu-btn:hover { color: var(–text); background: var(–surface2); }
+
+.topbar-title {
+font-size: 1.05rem;
+font-weight: 600;
+color: var(–text);
+letter-spacing: -0.2px;
+}
+.topbar-date {
+font-size: 0.78rem;
+color: var(–muted);
+margin-left: 2px;
+}
+
+.search-bar {
+margin-left: auto;
+display: flex;
+align-items: center;
+gap: 8px;
+background: var(–surface2);
+border: 1px solid var(–border2);
+border-radius: var(–radius-sm);
+padding: 7px 14px;
+width: 220px;
+transition: border-color var(–transition), width var(–transition);
+}
+.search-bar:focus-within { border-color: var(–accent); width: 260px; }
+.search-bar i { color: var(–muted); font-size: 0.8rem; }
+.search-bar input {
+background: none;
+border: none;
+outline: none;
+color: var(–text);
+font-family: inherit;
+font-size: 0.85rem;
+width: 100%;
+}
+.search-bar input::placeholder { color: var(–muted); }
+
+.topbar-avatar {
+width: 36px; height: 36px;
+border-radius: 50%;
+background: linear-gradient(135deg, var(–accent), #a78bfa);
+display: grid;
+place-items: center;
+font-size: 0.78rem;
+font-weight: 700;
+color: #fff;
+cursor: pointer;
+flex-shrink: 0;
+border: 2px solid transparent;
+transition: border-color var(–transition);
+}
+.topbar-avatar:hover { border-color: var(–accent); }
+
+.notif-btn {
+position: relative;
+width: 36px; height: 36px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+display: grid;
+place-items: center;
+cursor: pointer;
+color: var(–muted2);
+font-size: 0.85rem;
+transition: color var(–transition), border-color var(–transition);
+}
+.notif-btn:hover { color: var(–text); border-color: var(–border2); }
+.notif-dot {
+position: absolute;
+top: 7px; right: 7px;
+width: 6px; height: 6px;
+background: var(–accent);
+border-radius: 50%;
+border: 1.5px solid var(–bg);
+}
+
+/* ─── CONTENT ──────────────────────────────────────────── */
+.content {
+flex: 1;
+padding: 28px;
+max-width: 1200px;
+width: 100%;
+}
+
+.section-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 16px;
+}
+.section-title {
+font-size: 0.78rem;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
+color: var(–muted);
+}
+.see-all {
+font-size: 0.78rem;
+color: var(–accent);
+text-decoration: none;
+display: flex;
+align-items: center;
+gap: 4px;
+transition: opacity var(–transition);
+}
+.see-all:hover { opacity: 0.75; }
+
+/* ─── GREETING ─────────────────────────────────────────── */
+.greeting {
+margin-bottom: 28px;
+}
+.greeting h1 {
+font-size: 1.6rem;
+font-weight: 600;
+letter-spacing: -0.5px;
+color: var(–text);
+margin-bottom: 4px;
+}
+.greeting p {
+font-size: 0.88rem;
+color: var(–muted2);
+}
+.greeting .highlight { color: var(–accent); }
+
+/* ─── OVERVIEW CARDS ───────────────────────────────────── */
+.overview-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 14px;
+margin-bottom: 28px;
+}
+
+.card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 20px;
+transition: border-color var(–transition), transform var(–transition);
+}
+.card:hover {
+border-color: var(–border2);
+transform: translateY(-2px);
+}
+
+.stat-card {
+position: relative;
+overflow: hidden;
+}
+.stat-card::after {
+content: ‘’;
+position: absolute;
+top: -30px; right: -30px;
+width: 90px; height: 90px;
+border-radius: 50%;
+opacity: 0.06;
+}
+.stat-card.tasks::after   { background: var(–blue); }
+.stat-card.habits::after  { background: var(–green); }
+.stat-card.goals::after   { background: var(–amber); }
+
+.stat-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 12px;
+}
+.stat-label {
+font-size: 0.78rem;
+font-weight: 500;
+color: var(–muted2);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+.stat-icon {
+width: 32px; height: 32px;
+border-radius: 8px;
+display: grid;
+place-items: center;
+font-size: 0.8rem;
+}
+.stat-icon.tasks  { background: rgba(96,165,250,0.12);  color: var(–blue); }
+.stat-icon.habits { background: rgba(52,211,153,0.12);  color: var(–green); }
+.stat-icon.goals  { background: rgba(251,191,36,0.12);  color: var(–amber); }
+
+.stat-value {
+font-size: 2rem;
+font-weight: 600;
+letter-spacing: -1px;
+color: var(–text);
+font-family: ‘DM Mono’, monospace;
+margin-bottom: 4px;
+}
+.stat-sub {
+font-size: 0.75rem;
+color: var(–muted);
+display: flex;
+align-items: center;
+gap: 5px;
+}
+.stat-sub .up   { color: var(–green); }
+.stat-sub .down { color: var(–red); }
+
+/* ─── MAIN GRID ────────────────────────────────────────── */
+.main-grid {
+display: grid;
+grid-template-columns: 1fr 320px;
+gap: 14px;
+}
+
+/* ─── TASKS ────────────────────────────────────────────── */
+.task-item {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px 0;
+border-bottom: 1px solid var(–border);
+cursor: default;
+transition: opacity var(–transition);
+}
+.task-item:last-child { border-bottom: none; }
+
+.checkbox {
+width: 18px; height: 18px;
+border: 1.5px solid var(–border2);
+border-radius: 5px;
+display: grid;
+place-items: center;
+cursor: pointer;
+flex-shrink: 0;
+transition: background var(–transition), border-color var(–transition);
+font-size: 0.6rem;
+color: transparent;
+}
+.checkbox.checked {
+background: var(–accent);
+border-color: var(–accent);
+color: #fff;
+}
+.task-text {
+flex: 1;
+font-size: 0.88rem;
+color: var(–text);
+transition: color var(–transition);
+}
+.task-item.done .task-text {
+color: var(–muted);
+text-decoration: line-through;
+}
+.task-tag {
+font-size: 0.68rem;
+padding: 2px 8px;
+border-radius: 999px;
+font-weight: 500;
+}
+.task-tag.work    { background: rgba(96,165,250,0.12);  color: var(–blue); }
+.task-tag.health  { background: rgba(52,211,153,0.12);  color: var(–green); }
+.task-tag.learn   { background: rgba(167,139,250,0.12); color: #a78bfa; }
+.task-tag.finance { background: rgba(251,191,36,0.12);  color: var(–amber); }
+
+.add-task-btn {
+width: 100%;
+margin-top: 12px;
+padding: 9px;
+background: none;
+border: 1px dashed var(–border2);
+border-radius: var(–radius-sm);
+color: var(–muted);
+font-family: inherit;
+font-size: 0.82rem;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
+transition: border-color var(–transition), color var(–transition), background var(–transition);
+}
+.add-task-btn:hover {
+border-color: var(–accent);
+color: var(–accent);
+background: rgba(124,106,255,0.04);
+}
+
+/* ─── HABITS ───────────────────────────────────────────── */
+.habit-item {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 10px 0;
+border-bottom: 1px solid var(–border);
+}
+.habit-item:last-child { border-bottom: none; }
+.habit-dot {
+width: 10px; height: 10px;
+border-radius: 50%;
+flex-shrink: 0;
+}
+.habit-name {
+flex: 1;
+font-size: 0.88rem;
+color: var(–text);
+}
+.habit-streak {
+font-size: 0.72rem;
+color: var(–muted);
+font-family: ‘DM Mono’, monospace;
+margin-right: 10px;
+}
+.habit-check {
+width: 30px; height: 30px;
+border: 1.5px solid var(–border2);
+border-radius: 8px;
+display: grid;
+place-items: center;
+cursor: pointer;
+color: var(–muted);
+font-size: 0.75rem;
+transition: background var(–transition), border-color var(–transition), color var(–transition);
+flex-shrink: 0;
+}
+.habit-check.done {
+background: rgba(52,211,153,0.12);
+border-color: var(–green);
+color: var(–green);
+}
+
+/* ─── GOALS ────────────────────────────────────────────── */
+.goal-item { margin-bottom: 18px; }
+.goal-item:last-child { margin-bottom: 0; }
+.goal-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 8px;
+}
+.goal-name { font-size: 0.88rem; color: var(–text); font-weight: 500; }
+.goal-pct { font-size: 0.78rem; font-family: ‘DM Mono’, monospace; color: var(–muted2); }
+.progress-track {
+height: 5px;
+background: var(–surface3);
+border-radius: 999px;
+overflow: hidden;
+}
+.progress-fill {
+height: 100%;
+border-radius: 999px;
+transition: width 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ─── QUICK ACTIONS ────────────────────────────────────── */
+.quick-actions {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+.qa-btn {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 11px 14px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+color: var(–text);
+font-family: inherit;
+font-size: 0.85rem;
+cursor: pointer;
+text-decoration: none;
+transition: background var(–transition), border-color var(–transition), transform var(–transition);
+font-weight: 400;
+}
+.qa-btn:hover {
+background: var(–surface3);
+border-color: var(–border2);
+transform: translateX(3px);
+}
+.qa-btn i { width: 16px; text-align: center; color: var(–accent); font-size: 0.85rem; }
+
+/* ─── RIGHT COLUMN ─────────────────────────────────────── */
+.right-col { display: flex; flex-direction: column; gap: 14px; }
+
+/* ─── MINI CALENDAR STRIP ──────────────────────────────── */
+.cal-strip {
+display: flex;
+gap: 6px;
+margin-bottom: 4px;
+}
+.cal-day {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+padding: 8px 4px;
+border-radius: var(–radius-sm);
+cursor: pointer;
+transition: background var(–transition);
+}
+.cal-day:hover { background: var(–surface3); }
+.cal-day.today {
+background: var(–accent);
+}
+.cal-day.today .cal-dname,
+.cal-day.today .cal-dnum { color: #fff; }
+.cal-dname { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(–muted); }
+.cal-dnum { font-size: 0.9rem; font-weight: 600; color: var(–text); font-family: ‘DM Mono’, monospace; }
+
+/* ─── BOTTOM SECTION ───────────────────────────────────── */
+.bottom-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 14px;
+margin-top: 14px;
+}
+
+/* ─── UTILITY ──────────────────────────────────────────── */
+.gap-8 { margin-bottom: 8px; }
+
+/* ─── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 900px) {
+.sidebar {
+transform: translateX(-100%);
+}
+.sidebar.open {
+transform: translateX(0);
+box-shadow: 24px 0 60px rgba(0,0,0,0.5);
+}
+.main { margin-left: 0; }
+.menu-btn { display: grid; }
+.main-grid { grid-template-columns: 1fr; }
+.right-col { flex-direction: row; flex-wrap: wrap; }
+.right-col .card { flex: 1 1 260px; }
+.overview-grid { grid-template-columns: 1fr 1fr; }
+.bottom-grid { grid-template-columns: 1fr; }
+.search-bar { width: 160px; }
+.search-bar:focus-within { width: 190px; }
+}
+@media (max-width: 540px) {
+.content { padding: 16px; }
+.overview-grid { grid-template-columns: 1fr; }
+.topbar { padding: 0 16px; }
+.search-bar { display: none; }
+.greeting h1 { font-size: 1.3rem; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- Sidebar -->
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+    <span class="logo-text">Life<span>OS</span></span>
+  </div>
+
+  <nav>
+    <div class="sidebar-section">Main</div>
+    <a href="index.html" class="nav-item active">
+      <i class="fa-solid fa-gauge-high"></i> Dashboard
+    </a>
+    <a href="tasks.html" class="nav-item">
+      <i class="fa-solid fa-circle-check"></i> Tasks
+      <span class="nav-badge">5</span>
+    </a>
+    <a href="habits.html" class="nav-item">
+      <i class="fa-solid fa-fire-flame-curved"></i> Habits
+    </a>
+    <a href="goals.html" class="nav-item">
+      <i class="fa-solid fa-bullseye"></i> Goals
+    </a>
+    <a href="calendar.html" class="nav-item">
+      <i class="fa-regular fa-calendar"></i> Calendar
+    </a>
+
+```
+<div class="sidebar-section" style="margin-top:8px;">Tools</div>
+<a href="finance.html" class="nav-item">
+  <i class="fa-solid fa-wallet"></i> Finance
+</a>
+<a href="notes.html" class="nav-item">
+  <i class="fa-regular fa-note-sticky"></i> Notes
+</a>
+<a href="settings.html" class="nav-item">
+  <i class="fa-solid fa-gear"></i> Settings
+</a>
+```
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar">AO</div>
+      <div class="user-info">
+        <div class="user-name">Ait Omar</div>
+        <div class="user-role">Free Plan</div>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </div>
+  </div>
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Main -->
+
+<div class="main">
+
+  <!-- Topbar -->
+
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div>
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-date" id="todayDate"></div>
+    </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="Search anything..." disabled>
+    </div>
+    <div class="notif-btn">
+      <i class="fa-regular fa-bell"></i>
+      <span class="notif-dot"></span>
+    </div>
+    <div class="topbar-avatar">AO</div>
+  </header>
+
+  <!-- Content -->
+
+  <div class="content">
+
+```
+<!-- Greeting -->
+<div class="greeting">
+  <h1>Good morning, <span class="highlight">Ait</span> 👋</h1>
+  <p>Here's what's happening with your life today.</p>
+</div>
+
+<!-- Overview Cards -->
+<div class="section-header">
+  <span class="section-title">Overview</span>
+</div>
+<div class="overview-grid">
+  <div class="card stat-card tasks">
+    <div class="stat-top">
+      <span class="stat-label">Tasks Today</span>
+      <div class="stat-icon tasks"><i class="fa-solid fa-list-check"></i></div>
+    </div>
+    <div class="stat-value">8</div>
+    <div class="stat-sub">
+      <i class="fa-solid fa-arrow-trend-up up"></i>
+      <span><span class="up">3 completed</span> · 5 remaining</span>
+    </div>
+  </div>
+  <div class="card stat-card habits">
+    <div class="stat-top">
+      <span class="stat-label">Habits Done</span>
+      <div class="stat-icon habits"><i class="fa-solid fa-fire"></i></div>
+    </div>
+    <div class="stat-value">4/6</div>
+    <div class="stat-sub">
+      <i class="fa-solid fa-arrow-trend-up up"></i>
+      <span><span class="up">67%</span> completion rate</span>
+    </div>
+  </div>
+  <div class="card stat-card goals">
+    <div class="stat-top">
+      <span class="stat-label">Goals Progress</span>
+      <div class="stat-icon goals"><i class="fa-solid fa-chart-line"></i></div>
+    </div>
+    <div class="stat-value">42%</div>
+    <div class="stat-sub">
+      <i class="fa-solid fa-clock" style="color:var(--amber)"></i>
+      <span>Across <span style="color:var(--text)">3 active goals</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Grid -->
+<div class="main-grid">
+
+  <!-- LEFT: Tasks + Goals -->
+  <div style="display:flex; flex-direction:column; gap:14px;">
+
+    <!-- Tasks Preview -->
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Tasks</span>
+        <a href="tasks.html" class="see-all">View all <i class="fa-solid fa-arrow-right" style="font-size:0.65rem"></i></a>
+      </div>
+
+      <div class="task-item done" id="task1">
+        <div class="checkbox checked" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i></div>
+        <span class="task-text">Update portfolio website</span>
+        <span class="task-tag work">Work</span>
+      </div>
+      <div class="task-item done" id="task2">
+        <div class="checkbox checked" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i></div>
+        <span class="task-text">Morning workout — 30 min</span>
+        <span class="task-tag health">Health</span>
+      </div>
+      <div class="task-item">
+        <div class="checkbox" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i></div>
+        <span class="task-text">Read 20 pages of "Atomic Habits"</span>
+        <span class="task-tag learn">Learn</span>
+      </div>
+      <div class="task-item">
+        <div class="checkbox" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i></div>
+        <span class="task-text">Send invoice to client #4</span>
+        <span class="task-tag finance">Finance</span>
+      </div>
+      <div class="task-item">
+        <div class="checkbox" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i></div>
+        <span class="task-text">Review PR on GitHub</span>
+        <span class="task-tag work">Work</span>
+      </div>
+
+      <button class="add-task-btn">
+        <i class="fa-solid fa-plus"></i> Add new task
+      </button>
+    </div>
+
+    <!-- Goals -->
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Goals</span>
+        <a href="goals.html" class="see-all">View all <i class="fa-solid fa-arrow-right" style="font-size:0.65rem"></i></a>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-top">
+          <span class="goal-name"><i class="fa-solid fa-code" style="color:var(--blue);margin-right:8px;font-size:0.8rem"></i>Launch SaaS Product</span>
+          <span class="goal-pct">65%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:65%; background: linear-gradient(90deg, var(--blue), #818cf8);"></div>
+        </div>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-top">
+          <span class="goal-name"><i class="fa-solid fa-dumbbell" style="color:var(--green);margin-right:8px;font-size:0.8rem"></i>Lose 5kg in 60 days</span>
+          <span class="goal-pct">30%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:30%; background: linear-gradient(90deg, var(--green), #6ee7b7);"></div>
+        </div>
+      </div>
+
+      <div class="goal-item">
+        <div class="goal-top">
+          <span class="goal-name"><i class="fa-solid fa-piggy-bank" style="color:var(--amber);margin-right:8px;font-size:0.8rem"></i>Save 20,000 MAD</span>
+          <span class="goal-pct">48%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:48%; background: linear-gradient(90deg, var(--amber), #fde68a);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COL -->
+  <div class="right-col">
+
+    <!-- Calendar Strip -->
+    <div class="card">
+      <div class="section-header gap-8">
+        <span class="section-title">This Week</span>
+        <a href="calendar.html" class="see-all">Calendar <i class="fa-solid fa-arrow-right" style="font-size:0.65rem"></i></a>
+      </div>
+      <div class="cal-strip" id="calStrip"></div>
+    </div>
+
+    <!-- Habits -->
+    <div class="card">
+      <div class="section-header">
+        <span class="section-title">Habits</span>
+        <a href="habits.html" class="see-all">View all <i class="fa-solid fa-arrow-right" style="font-size:0.65rem"></i></a>
+      </div>
+
+      <div class="habit-item">
+        <div class="habit-dot" style="background:var(--green)"></div>
+        <span class="habit-name">Morning Prayer</span>
+        <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-right:3px"></i>12d</span>
+        <div class="habit-check done" onclick="toggleHabit(this)"><i class="fa-solid fa-check"></i></div>
+      </div>
+      <div class="habit-item">
+        <div class="habit-dot" style="background:var(--blue)"></div>
+        <span class="habit-name">Cold Shower</span>
+        <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-right:3px"></i>7d</span>
+        <div class="habit-check done" onclick="toggleHabit(this)"><i class="fa-solid fa-check"></i></div>
+      </div>
+      <div class="habit-item">
+        <div class="habit-dot" style="background:#a78bfa"></div>
+        <span class="habit-name">Read 20 pages</span>
+        <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-right:3px"></i>3d</span>
+        <div class="habit-check" onclick="toggleHabit(this)"><i class="fa-solid fa-check"></i></div>
+      </div>
+      <div class="habit-item">
+        <div class="habit-dot" style="background:var(--red)"></div>
+        <span class="habit-name">No Social Media</span>
+        <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-right:3px"></i>1d</span>
+        <div class="habit-check" onclick="toggleHabit(this)"><i class="fa-solid fa-check"></i></div>
+      </div>
+      <div class="habit-item">
+        <div class="habit-dot" style="background:var(--amber)"></div>
+        <span class="habit-name">Workout</span>
+        <span class="habit-streak"><i class="fa-solid fa-fire" style="color:var(--amber);margin-right:3px"></i>5d</span>
+        <div class="habit-check done" onclick="toggleHabit(this)"><i class="fa-solid fa-check"></i></div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+      <div class="section-header gap-8">
+        <span class="section-title">Quick Actions</span>
+      </div>
+      <div class="quick-actions">
+        <a href="tasks.html" class="qa-btn">
+          <i class="fa-solid fa-plus"></i> Add Task
+        </a>
+        <a href="habits.html" class="qa-btn">
+          <i class="fa-solid fa-fire-flame-curved"></i> Add Habit
+        </a>
+        <a href="notes.html" class="qa-btn">
+          <i class="fa-regular fa-note-sticky"></i> Add Note
+        </a>
+        <a href="finance.html" class="qa-btn">
+          <i class="fa-solid fa-money-bill-wave"></i> Log Expense
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- end main-grid -->
+```
+
+  </div>
+  <!-- end content -->
+</div>
+<!-- end main -->
+
+<script>
+  // ── Date in topbar ──
+  const dateEl = document.getElementById('todayDate');
+  const now = new Date();
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  dateEl.textContent = now.toLocaleDateString('en-GB', opts);
+
+  // ── Week strip ──
+  const strip = document.getElementById('calStrip');
+  const days  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today = now.getDay();
+  for (let i = 0; i < 7; i++) {
+    const d   = new Date(now);
+    d.setDate(now.getDate() - today + i);
+    const el  = document.createElement('div');
+    el.className = 'cal-day' + (i === today ? ' today' : '');
+    el.innerHTML = `<span class="cal-dname">${days[i]}</span><span class="cal-dnum">${d.getDate()}</span>`;
+    strip.appendChild(el);
+  }
+
+  // ── Toggle task ──
+  function toggleTask(cb) {
+    cb.classList.toggle('checked');
+    cb.closest('.task-item').classList.toggle('done', cb.classList.contains('checked'));
+  }
+
+  // ── Toggle habit ──
+  function toggleHabit(btn) {
+    btn.classList.toggle('done');
+  }
+
+  // ── Sidebar (mobile) ──
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('show');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+</script>
+
+</body>
+</html>
