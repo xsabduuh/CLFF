@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeOS — الملاحظات</title>
+  <title>LifeOS — دفتر الملاحظات المتطور</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -58,7 +58,6 @@
       z-index: 100;
       transition: transform var(--transition);
     }
-
     .sidebar-logo {
       display: flex;
       align-items: center;
@@ -77,92 +76,52 @@
       color: #fff;
       flex-shrink: 0;
     }
-    .logo-text {
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.3px;
-      color: var(--text);
-    }
+    .logo-text { font-size: 1rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
     .logo-text span { color: var(--accent); }
 
     .sidebar-section {
       padding: 14px 12px 4px;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-size: 0.68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
       color: var(--muted);
     }
-
     nav { flex: 1; overflow-y: auto; padding: 8px 12px; }
     nav::-webkit-scrollbar { width: 4px; }
     nav::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      color: var(--muted2);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 400;
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      color: var(--muted2); text-decoration: none;
+      font-size: 0.9rem; font-weight: 400;
       transition: background var(--transition), color var(--transition);
-      margin-bottom: 2px;
-      position: relative;
+      margin-bottom: 2px; position: relative;
     }
     .nav-item i { width: 20px; text-align: center; font-size: 0.95rem; flex-shrink: 0; }
     .nav-item:hover { background: var(--surface2); color: var(--text); }
     .nav-item.active {
       background: rgba(124,106,255,0.12);
-      color: var(--accent);
-      font-weight: 500;
+      color: var(--accent); font-weight: 500;
     }
     .nav-item.active::before {
-      content: '';
-      position: absolute;
-      right: -12px;
+      content: ''; position: absolute; right: -12px;
       top: 50%; transform: translateY(-50%);
-      width: 3px; height: 60%;
-      background: var(--accent);
+      width: 3px; height: 60%; background: var(--accent);
       border-radius: 3px 0 0 3px;
     }
 
-    .nav-badge {
-      margin-right: auto;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.65rem;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 999px;
-    }
-
-    .sidebar-footer {
-      border-top: 1px solid var(--border);
-      padding: 14px 12px;
-    }
+    .sidebar-footer { border-top: 1px solid var(--border); padding: 14px 12px; }
     .user-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background var(--transition);
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--transition);
     }
     .user-card:hover { background: var(--surface2); }
     .avatar {
-      width: 34px; height: 34px;
-      border-radius: 50%;
+      width: 34px; height: 34px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--purple));
-      display: grid;
-      place-items: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #fff;
-      flex-shrink: 0;
+      display: grid; place-items: center;
+      font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;
     }
     .user-info { flex: 1; min-width: 0; }
     .user-name { font-size: 0.85rem; font-weight: 500; color: var(--text); }
@@ -170,10 +129,8 @@
 
     /* ===== OVERLAY (mobile) ===== */
     .overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 99;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); z-index: 99;
       backdrop-filter: blur(2px);
     }
     .overlay.show { display: block; }
@@ -181,9 +138,7 @@
     /* ===== MAIN ===== */
     .main {
       margin-right: var(--sidebar-w);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      flex: 1; display: flex; flex-direction: column;
       min-height: 100vh;
     }
 
@@ -191,168 +146,142 @@
     .topbar {
       height: var(--topbar-h);
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      padding: 0 28px;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(12,12,15,0.88);
-      backdrop-filter: blur(16px);
+      display: flex; align-items: center;
+      padding: 0 28px; gap: 16px;
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(12,12,15,0.88); backdrop-filter: blur(16px);
     }
     .menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--muted2);
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 6px;
+      display: none; background: none; border: none;
+      color: var(--muted2); font-size: 1.1rem; cursor: pointer;
+      padding: 6px; border-radius: 6px;
       transition: color var(--transition), background var(--transition);
     }
     .menu-btn:hover { color: var(--text); background: var(--surface2); }
 
     .topbar-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
+      font-size: 1.05rem; font-weight: 600; color: var(--text);
     }
     .topbar-date {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-right: 4px;
+      font-size: 0.78rem; color: var(--muted); margin-right: 4px;
     }
 
     .search-bar {
       margin-right: auto;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: var(--radius-sm);
-      padding: 7px 14px;
-      width: 220px;
-      transition: border-color var(--transition), width var(--transition);
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: var(--radius-sm); padding: 7px 14px;
+      width: 260px; transition: border-color var(--transition), width var(--transition);
     }
-    .search-bar:focus-within { border-color: var(--accent); width: 260px; }
+    .search-bar:focus-within { border-color: var(--accent); width: 300px; }
     .search-bar i { color: var(--muted); font-size: 0.8rem; }
     .search-bar input {
-      background: none;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.85rem;
-      width: 100%;
+      background: none; border: none; outline: none;
+      color: var(--text); font-family: inherit;
+      font-size: 0.85rem; width: 100%;
     }
     .search-bar input::placeholder { color: var(--muted); }
 
     .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: flex; align-items: center; gap: 12px;
     }
     .notif-btn {
-      position: relative;
-      width: 36px; height: 36px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      color: var(--muted2);
-      font-size: 0.85rem;
+      position: relative; width: 36px; height: 36px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); display: grid; place-items: center;
+      cursor: pointer; color: var(--muted2); font-size: 0.85rem;
       transition: color var(--transition), border-color var(--transition);
     }
     .notif-btn:hover { color: var(--text); border-color: var(--border2); }
     .notif-dot {
-      position: absolute;
-      top: 7px; left: 7px;
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      border: 1.5px solid var(--bg);
+      position: absolute; top: 7px; left: 7px;
+      width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; border: 1.5px solid var(--bg);
     }
     .topbar-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
+      width: 36px; height: 36px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--purple));
-      display: grid;
-      place-items: center;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      flex-shrink: 0;
-      border: 2px solid transparent;
-      transition: border-color var(--transition);
+      display: grid; place-items: center;
+      font-size: 0.78rem; font-weight: 700; color: #fff;
+      cursor: pointer; flex-shrink: 0;
+      border: 2px solid transparent; transition: border-color var(--transition);
     }
     .topbar-avatar:hover { border-color: var(--accent); }
 
     /* ===== CONTENT ===== */
-    .content { flex: 1; padding: 28px; max-width: 1200px; }
+    .content { flex: 1; padding: 24px 28px; display: flex; gap: 16px; height: calc(100vh - var(--topbar-h)); }
 
-    /* ===== NOTES LAYOUT ===== */
-    .notes-layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 20px;
-      height: calc(100vh - var(--topbar-h) - 100px);
-    }
-
-    /* ===== NOTES SIDEBAR (القائمة) ===== */
-    .notes-sidebar {
+    /* ===== NOTEBOOKS SIDEBAR ===== */
+    .notebooks-sidebar {
+      width: 240px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      overflow: hidden; flex-shrink: 0;
     }
-    .notes-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .notebooks-header {
+      padding: 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .notes-header h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .new-note-btn {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border: none;
-      border-radius: var(--radius-sm);
-      color: #fff;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
+    .notebooks-header h3 { font-size: 0.9rem; font-weight: 600; }
+    .add-notebook-btn {
+      width: 28px; height: 28px; background: var(--accent);
+      border: none; border-radius: var(--radius-sm);
+      color: #fff; cursor: pointer; display: grid; place-items: center;
       transition: background var(--transition);
     }
-    .new-note-btn:hover { background: var(--accent2); }
-    
-    .notes-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px;
-    }
-    .notes-list::-webkit-scrollbar { width: 4px; }
-    .notes-list::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+    .add-notebook-btn:hover { background: var(--accent2); }
 
+    .notebooks-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .notebook-item {
+      padding: 12px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--transition);
+      margin-bottom: 4px; border: 1px solid transparent;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .notebook-item i { width: 20px; color: var(--accent); font-size: 0.9rem; }
+    .notebook-item span { flex: 1; font-size: 0.9rem; }
+    .notebook-item .note-count {
+      font-size: 0.7rem; color: var(--muted); font-family: 'DM Mono', monospace;
+    }
+    .notebook-item:hover { background: var(--surface2); }
+    .notebook-item.active {
+      background: rgba(124,106,255,0.1);
+      border-color: rgba(124,106,255,0.3);
+    }
+    .delete-notebook-btn {
+      opacity: 0; background: none; border: none; color: var(--muted);
+      cursor: pointer; font-size: 0.7rem; padding: 4px;
+      transition: opacity var(--transition), color var(--transition);
+    }
+    .notebook-item:hover .delete-notebook-btn { opacity: 1; }
+    .delete-notebook-btn:hover { color: var(--red); }
+
+    /* ===== NOTES LIST ===== */
+    .notes-list-panel {
+      width: 280px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex; flex-direction: column;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .notes-list-header {
+      padding: 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .notes-list-header h3 { font-size: 0.9rem; font-weight: 600; }
+    .new-note-btn {
+      width: 28px; height: 28px; background: var(--accent);
+      border: none; border-radius: var(--radius-sm);
+      color: #fff; cursor: pointer; display: grid; place-items: center;
+    }
+    .notes-list { flex: 1; overflow-y: auto; padding: 8px; }
     .note-item {
-      padding: 14px 12px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: background var(--transition);
-      margin-bottom: 4px;
-      border: 1px solid transparent;
+      padding: 12px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--transition);
+      margin-bottom: 4px; border: 1px solid transparent;
     }
     .note-item:hover { background: var(--surface2); }
     .note-item.active {
@@ -360,153 +289,115 @@
       border-color: rgba(124,106,255,0.3);
     }
     .note-item-title {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 0.9rem; font-weight: 500; margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .note-item-preview {
-      font-size: 0.75rem;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 8px;
+      font-size: 0.75rem; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 6px;
     }
     .note-item-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .note-item-date {
-      font-size: 0.65rem;
-      color: var(--muted2);
-      font-family: 'DM Mono', monospace;
-    }
+    .note-item-date { font-size: 0.65rem; color: var(--muted2); }
     .delete-note-btn {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 0.7rem;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity var(--transition), color var(--transition);
+      background: none; border: none; color: var(--muted);
+      cursor: pointer; font-size: 0.7rem; opacity: 0;
+      transition: opacity var(--transition);
     }
     .note-item:hover .delete-note-btn { opacity: 1; }
     .delete-note-btn:hover { color: var(--red); }
 
-    /* ===== NOTE EDITOR ===== */
-    .note-editor {
+    /* ===== EDITOR ===== */
+    .editor-panel {
+      flex: 1;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       overflow: hidden;
     }
     .editor-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
     }
     .note-title-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-size: 1.2rem;
-      font-weight: 600;
-      font-family: inherit;
-      outline: none;
+      width: 100%; background: transparent; border: none;
+      color: var(--text); font-size: 1.2rem; font-weight: 600;
+      font-family: inherit; outline: none;
     }
     .note-title-input::placeholder { color: var(--muted); }
-    
+
     .editor-toolbar {
-      padding: 8px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      gap: 8px;
+      padding: 8px 16px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 6px; flex-wrap: wrap;
     }
     .tool-btn {
-      width: 32px; height: 32px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--muted2);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      font-size: 0.85rem;
-      transition: all var(--transition);
+      width: 32px; height: 32px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--muted2); cursor: pointer; display: grid; place-items: center;
+      font-size: 0.85rem; transition: all var(--transition);
     }
-    .tool-btn:hover {
-      background: var(--surface3);
-      color: var(--text);
-      border-color: var(--border2);
-    }
+    .tool-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+    .tool-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    .note-content-area {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
+    .editor-content {
+      flex: 1; padding: 20px; overflow-y: auto;
     }
-    .note-content-input {
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      border: none;
+    .rich-editor {
+      width: 100%; height: 100%; outline: none;
+      font-family: inherit; font-size: 0.95rem; line-height: 1.7;
       color: var(--text);
-      font-family: inherit;
-      font-size: 0.95rem;
-      line-height: 1.7;
-      resize: none;
-      outline: none;
     }
-    .note-content-input::placeholder { color: var(--muted); }
+    .rich-editor:empty::before {
+      content: 'ابدأ بكتابة ملاحظتك هنا...';
+      color: var(--muted);
+    }
+    .rich-editor h1, .rich-editor h2, .rich-editor h3 {
+      margin: 1.2em 0 0.6em; font-weight: 600;
+    }
+    .rich-editor h1 { font-size: 1.8rem; }
+    .rich-editor h2 { font-size: 1.5rem; }
+    .rich-editor h3 { font-size: 1.2rem; }
+    .rich-editor p { margin: 0.8em 0; }
+    .rich-editor ul, .rich-editor ol { margin: 0.8em 0; padding-right: 24px; }
+    .rich-editor li { margin: 0.3em 0; }
+    .rich-editor blockquote {
+      border-right: 3px solid var(--accent); margin: 1em 0;
+      padding: 0.5em 1em; background: var(--surface2);
+    }
+    .rich-editor hr { border: none; border-top: 1px solid var(--border); margin: 1.5em 0; }
+    .rich-editor a { color: var(--accent); text-decoration: underline; }
 
     .editor-footer {
-      padding: 12px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 8px 16px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 0.75rem; color: var(--muted);
     }
-    .save-status {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-    .save-status.saved { color: var(--green); }
 
-    /* ===== EMPTY STATE ===== */
-    .empty-editor {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: var(--muted);
-      text-align: center;
-      padding: 40px;
-    }
-    .empty-editor i {
-      font-size: 3rem;
-      margin-bottom: 16px;
-      opacity: 0.4;
+    /* ===== EMPTY STATES ===== */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; color: var(--muted);
+      text-align: center; padding: 20px;
     }
 
     /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .notebooks-sidebar { display: none; }
+    }
     @media (max-width: 900px) {
       .sidebar { transform: translateX(100%); }
       .sidebar.open { transform: translateX(0); box-shadow: -24px 0 60px rgba(0,0,0,0.5); }
       .main { margin-right: 0; }
       .menu-btn { display: grid; }
-      .notes-layout { grid-template-columns: 1fr; }
-      .notes-sidebar { display: none; }
       .search-bar { display: none; }
+      .content { flex-direction: column; height: auto; }
+      .notes-list-panel { width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .content { padding: 16px; }
+      .topbar { padding: 0 16px; }
     }
   </style>
 </head>
@@ -546,70 +437,70 @@
 
 <!-- Main -->
 <div class="main">
-  <!-- Topbar موحّد -->
   <header class="topbar">
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
     <div>
-      <div class="topbar-title">الملاحظات</div>
+      <div class="topbar-title">دفتر الملاحظات</div>
       <div class="topbar-date" id="todayDate"></div>
     </div>
     <div class="search-bar">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" placeholder="بحث في الملاحظات..." id="searchNotes" oninput="filterNotes(this.value)">
+      <input type="text" placeholder="بحث في جميع الملاحظات..." id="globalSearch" oninput="performSearch(this.value)">
     </div>
     <div class="topbar-actions">
-      <div class="notif-btn">
-        <i class="fa-regular fa-bell"></i>
-        <span class="notif-dot"></span>
-      </div>
+      <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
       <div class="topbar-avatar">AO</div>
     </div>
   </header>
 
   <div class="content">
-    <div class="notes-layout">
-      <!-- قائمة الملاحظات -->
-      <div class="notes-sidebar">
-        <div class="notes-header">
-          <h3>ملاحظاتي</h3>
-          <button class="new-note-btn" onclick="createNewNote()" title="ملاحظة جديدة">
-            <i class="fa-solid fa-plus"></i>
-          </button>
-        </div>
-        <div class="notes-list" id="notesList">
-          <!-- سيتم ملؤها عبر JavaScript -->
-        </div>
+    <!-- قائمة الدفاتر -->
+    <div class="notebooks-sidebar">
+      <div class="notebooks-header">
+        <h3>الدفاتر</h3>
+        <button class="add-notebook-btn" onclick="createNotebook()" title="دفتر جديد"><i class="fa-solid fa-plus"></i></button>
       </div>
+      <div class="notebooks-list" id="notebooksList"></div>
+    </div>
 
-      <!-- محرر الملاحظة -->
-      <div class="note-editor" id="noteEditor">
-        <div class="empty-editor" id="emptyEditor">
-          <i class="fa-regular fa-note-sticky"></i>
-          <h3>اختر ملاحظة أو أنشئ جديدة</h3>
-          <p style="margin-top:8px">ابدأ بكتابة أفكارك وملاحظاتك المهمة.</p>
-        </div>
-        
-        <div id="editorContent" style="display: none; height: 100%; display: flex; flex-direction: column;">
-          <div class="editor-header">
-            <input type="text" class="note-title-input" id="noteTitle" placeholder="عنوان الملاحظة" oninput="onNoteChange()">
-          </div>
-          <div class="editor-toolbar">
-            <button class="tool-btn" onclick="formatText('bold')" title="غامق"><i class="fa-solid fa-bold"></i></button>
-            <button class="tool-btn" onclick="formatText('italic')" title="مائل"><i class="fa-solid fa-italic"></i></button>
-            <button class="tool-btn" onclick="formatText('underline')" title="تسطير"><i class="fa-solid fa-underline"></i></button>
-            <span style="flex:1"></span>
-            <button class="tool-btn" onclick="deleteCurrentNote()" title="حذف الملاحظة" style="color: var(--red)"><i class="fa-solid fa-trash-can"></i></button>
-          </div>
-          <div class="note-content-area">
-            <textarea class="note-content-input" id="noteContent" placeholder="اكتب ملاحظتك هنا..." oninput="onNoteChange()"></textarea>
-          </div>
-          <div class="editor-footer">
-            <span class="save-status" id="saveStatus">
-              <i class="fa-regular fa-save"></i> تم الحفظ تلقائياً
-            </span>
-            <span style="font-size:0.7rem; color:var(--muted);" id="wordCount">0 كلمة</span>
-          </div>
-        </div>
+    <!-- قائمة الملاحظات في الدفتر المحدد -->
+    <div class="notes-list-panel">
+      <div class="notes-list-header">
+        <h3 id="currentNotebookTitle">كل الملاحظات</h3>
+        <button class="new-note-btn" onclick="createNote()" title="ملاحظة جديدة"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <div class="notes-list" id="notesList"></div>
+    </div>
+
+    <!-- محرر الملاحظة -->
+    <div class="editor-panel" id="editorPanel">
+      <div class="editor-header">
+        <input type="text" class="note-title-input" id="noteTitleInput" placeholder="عنوان الملاحظة" oninput="updateActiveNoteTitle()">
+      </div>
+      <div class="editor-toolbar">
+        <button class="tool-btn" onclick="formatDoc('bold')"><i class="fa-solid fa-bold"></i></button>
+        <button class="tool-btn" onclick="formatDoc('italic')"><i class="fa-solid fa-italic"></i></button>
+        <button class="tool-btn" onclick="formatDoc('underline')"><i class="fa-solid fa-underline"></i></button>
+        <span style="width:1px; background:var(--border); margin:0 4px;"></span>
+        <button class="tool-btn" onclick="formatDoc('formatBlock', 'h1')">H1</button>
+        <button class="tool-btn" onclick="formatDoc('formatBlock', 'h2')">H2</button>
+        <button class="tool-btn" onclick="formatDoc('formatBlock', 'h3')">H3</button>
+        <span style="width:1px; background:var(--border); margin:0 4px;"></span>
+        <button class="tool-btn" onclick="formatDoc('insertUnorderedList')"><i class="fa-solid fa-list-ul"></i></button>
+        <button class="tool-btn" onclick="formatDoc('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
+        <span style="width:1px; background:var(--border); margin:0 4px;"></span>
+        <button class="tool-btn" onclick="formatDoc('formatBlock', 'blockquote')"><i class="fa-solid fa-quote-right"></i></button>
+        <button class="tool-btn" onclick="formatDoc('insertHorizontalRule')"><i class="fa-solid fa-minus"></i></button>
+        <button class="tool-btn" onclick="createLink()"><i class="fa-solid fa-link"></i></button>
+        <span style="flex:1"></span>
+        <button class="tool-btn" onclick="deleteCurrentNote()" style="color:var(--red)"><i class="fa-solid fa-trash-can"></i></button>
+      </div>
+      <div class="editor-content">
+        <div id="richEditor" class="rich-editor" contenteditable="true" oninput="onEditorInput()" onkeyup="updateStats()" onmouseup="updateStats()"></div>
+      </div>
+      <div class="editor-footer">
+        <span id="editorStats">0 كلمة | 0 حرف</span>
+        <span id="saveIndicator"><i class="fa-solid fa-check"></i> تم الحفظ</span>
       </div>
     </div>
   </div>
@@ -620,141 +511,146 @@
     "use strict";
 
     // ---------- CONSTANTS ----------
-    const STORAGE_KEY = 'lifeos_notes';
-    
+    const STORAGE_KEY = 'lifeos_notes_v2'; // هيكل: { notebooks: [], notes: [] }
+
     // ---------- STATE ----------
-    let notes = [];
+    let data = { notebooks: [], notes: [] };
+    let activeNotebookId = null; // null = كل الملاحظات
     let activeNoteId = null;
     let searchTerm = '';
     let saveTimeout = null;
 
-    // ---------- LOAD / SAVE ----------
-    function loadNotes() {
-      try {
-        notes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch { notes = []; }
-    }
-
-    function saveNotes() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
-      updateSaveStatus();
-    }
-
-    // ---------- UTILS ----------
-    function formatDate(timestamp) {
-      const d = new Date(timestamp);
-      const now = new Date();
-      const diff = now - d;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      
-      if (days === 0) return 'اليوم';
-      if (days === 1) return 'أمس';
-      if (days < 7) return `قبل ${days} أيام`;
-      return d.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
-    }
-
-    function getPreview(content) {
-      const plain = content.replace(/<[^>]*>/g, '').substring(0, 50);
-      return plain || 'ملاحظة فارغة...';
-    }
-
-    function countWords(text) {
-      const plain = text.replace(/<[^>]*>/g, '').trim();
-      return plain ? plain.split(/\s+/).length : 0;
-    }
-
-    function updateSaveStatus() {
-      const status = document.getElementById('saveStatus');
-      if (status) {
-        status.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ';
-        status.classList.add('saved');
-        setTimeout(() => {
-          status.innerHTML = '<i class="fa-regular fa-save"></i> تم الحفظ تلقائياً';
-          status.classList.remove('saved');
-        }, 1500);
+    // ---------- INITIAL DATA ----------
+    function initializeData() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try { data = JSON.parse(stored); } catch { data = { notebooks: [], notes: [] }; }
       }
+      if (!data.notebooks) data.notebooks = [];
+      if (!data.notes) data.notes = [];
+
+      // إنشاء دفتر افتراضي إذا لم يكن موجوداً
+      if (data.notebooks.length === 0) {
+        const defaultNotebook = {
+          id: Date.now(),
+          name: 'عام',
+          createdAt: Date.now()
+        };
+        data.notebooks.push(defaultNotebook);
+      }
+      saveToStorage();
+    }
+
+    function saveToStorage() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // ---------- RENDER NOTEBOOKS ----------
+    function renderNotebooks() {
+      const container = document.getElementById('notebooksList');
+      const notebooks = data.notebooks;
+      
+      let html = `<div class="notebook-item ${activeNotebookId === null ? 'active' : ''}" onclick="selectNotebook(null)">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>كل الملاحظات</span>
+        <span class="note-count">${data.notes.length}</span>
+      </div>`;
+
+      notebooks.forEach(nb => {
+        const noteCount = data.notes.filter(n => n.notebookId === nb.id).length;
+        html += `
+          <div class="notebook-item ${activeNotebookId === nb.id ? 'active' : ''}" onclick="selectNotebook(${nb.id})">
+            <i class="fa-solid fa-book"></i>
+            <span>${escapeHtml(nb.name)}</span>
+            <span class="note-count">${noteCount}</span>
+            <button class="delete-notebook-btn" onclick="event.stopPropagation(); deleteNotebook(${nb.id})" title="حذف الدفتر">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+      });
+      container.innerHTML = html || '<div class="empty-state">لا توجد دفاتر</div>';
     }
 
     // ---------- RENDER NOTES LIST ----------
     function renderNotesList() {
       const container = document.getElementById('notesList');
+      const notebookTitle = document.getElementById('currentNotebookTitle');
       
-      let filtered = notes;
+      let notes = data.notes;
+      
+      // فلترة حسب الدفتر النشط
+      if (activeNotebookId !== null) {
+        notes = notes.filter(n => n.notebookId === activeNotebookId);
+        const nb = data.notebooks.find(nb => nb.id === activeNotebookId);
+        notebookTitle.textContent = nb ? nb.name : 'ملاحظات';
+      } else {
+        notebookTitle.textContent = 'كل الملاحظات';
+      }
+
+      // فلترة حسب البحث
       if (searchTerm) {
-        filtered = filtered.filter(n => 
+        notes = notes.filter(n => 
           n.title.toLowerCase().includes(searchTerm) || 
           n.content.toLowerCase().includes(searchTerm)
         );
       }
 
-      // ترتيب حسب تاريخ التعديل (الأحدث أولاً)
-      filtered.sort((a, b) => b.updatedAt - a.updatedAt);
+      // ترتيب حسب تاريخ التعديل
+      notes.sort((a, b) => b.updatedAt - a.updatedAt);
 
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center; padding:32px 16px; color:var(--muted);">
-            <i class="fa-regular fa-note-sticky" style="font-size:2rem; margin-bottom:12px; opacity:0.5;"></i>
-            <p>${searchTerm ? 'لا توجد ملاحظات تطابق البحث.' : 'لا توجد ملاحظات بعد. أنشئ ملاحظتك الأولى!'}</p>
-          </div>
-        `;
+      if (notes.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-note-sticky" style="font-size:2rem;opacity:0.5;margin-bottom:12px;"></i><p>لا توجد ملاحظات</p></div>`;
         return;
       }
 
-      container.innerHTML = filtered.map(note => `
-        <div class="note-item ${activeNoteId === note.id ? 'active' : ''}" onclick="selectNote(${note.id})">
-          <div class="note-item-title">${escapeHtml(note.title || 'بدون عنوان')}</div>
-          <div class="note-item-preview">${escapeHtml(getPreview(note.content))}</div>
-          <div class="note-item-meta">
-            <span class="note-item-date">${formatDate(note.updatedAt)}</span>
-            <button class="delete-note-btn" onclick="event.stopPropagation(); deleteNote(${note.id})" title="حذف">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+      container.innerHTML = notes.map(note => {
+        const plainContent = note.content.replace(/<[^>]*>/g, ' ').substring(0, 60);
+        return `
+          <div class="note-item ${activeNoteId === note.id ? 'active' : ''}" onclick="selectNote(${note.id})">
+            <div class="note-item-title">${escapeHtml(note.title || 'بدون عنوان')}</div>
+            <div class="note-item-preview">${escapeHtml(plainContent)}</div>
+            <div class="note-item-meta">
+              <span class="note-item-date">${formatRelativeTime(note.updatedAt)}</span>
+              <button class="delete-note-btn" onclick="event.stopPropagation(); deleteNote(${note.id})"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // ---------- RENDER EDITOR ----------
     function renderEditor() {
-      const emptyEditor = document.getElementById('emptyEditor');
-      const editorContent = document.getElementById('editorContent');
-      const note = notes.find(n => n.id === activeNoteId);
-
+      const editorPanel = document.getElementById('editorPanel');
+      const note = data.notes.find(n => n.id === activeNoteId);
+      
       if (!note) {
-        emptyEditor.style.display = 'flex';
-        editorContent.style.display = 'none';
+        // إخفاء المحرر أو عرض رسالة فارغة
+        document.getElementById('noteTitleInput').value = '';
+        document.getElementById('richEditor').innerHTML = '';
+        document.getElementById('noteTitleInput').disabled = true;
+        document.getElementById('richEditor').contentEditable = 'false';
+        editorPanel.style.opacity = '0.5';
+        updateStats();
         return;
       }
 
-      emptyEditor.style.display = 'none';
-      editorContent.style.display = 'flex';
-
-      document.getElementById('noteTitle').value = note.title || '';
-      document.getElementById('noteContent').value = note.content || '';
-      updateWordCount();
+      editorPanel.style.opacity = '1';
+      document.getElementById('noteTitleInput').disabled = false;
+      document.getElementById('richEditor').contentEditable = 'true';
+      document.getElementById('noteTitleInput').value = note.title || '';
+      document.getElementById('richEditor').innerHTML = note.content || '';
+      updateStats();
+      showSavedIndicator();
     }
 
-    function updateWordCount() {
-      const content = document.getElementById('noteContent').value;
-      const count = countWords(content);
-      document.getElementById('wordCount').textContent = `${count} كلمة`;
-    }
-
-    // ---------- NOTE ACTIONS ----------
-    window.createNewNote = function() {
-      const newNote = {
-        id: Date.now(),
-        title: '',
-        content: '',
-        createdAt: Date.now(),
-        updatedAt: Date.now()
-      };
-      notes.push(newNote);
-      activeNoteId = newNote.id;
-      saveNotes();
+    // ---------- SELECTION ----------
+    window.selectNotebook = function(id) {
+      activeNotebookId = id;
+      activeNoteId = null; // إلغاء تحديد الملاحظة
+      renderNotebooks();
       renderNotesList();
       renderEditor();
-      document.getElementById('noteTitle').focus();
     };
 
     window.selectNote = function(id) {
@@ -763,12 +659,68 @@
       renderEditor();
     };
 
-    window.deleteNote = function(id) {
-      notes = notes.filter(n => n.id !== id);
-      if (activeNoteId === id) {
-        activeNoteId = notes.length > 0 ? notes[0].id : null;
+    // ---------- CREATE / DELETE NOTEBOOK ----------
+    window.createNotebook = function() {
+      const name = prompt('اسم الدفتر الجديد:');
+      if (!name || !name.trim()) return;
+      const newNotebook = {
+        id: Date.now(),
+        name: name.trim(),
+        createdAt: Date.now()
+      };
+      data.notebooks.push(newNotebook);
+      saveToStorage();
+      renderNotebooks();
+    };
+
+    window.deleteNotebook = function(id) {
+      if (!confirm('حذف الدفتر سيؤدي إلى حذف جميع ملاحظاته. متأكد؟')) return;
+      data.notes = data.notes.filter(n => n.notebookId !== id);
+      data.notebooks = data.notebooks.filter(nb => nb.id !== id);
+      if (activeNotebookId === id) {
+        activeNotebookId = null;
+        activeNoteId = null;
       }
-      saveNotes();
+      saveToStorage();
+      renderNotebooks();
+      renderNotesList();
+      renderEditor();
+    };
+
+    // ---------- CREATE / DELETE NOTE ----------
+    window.createNote = function() {
+      let notebookId = activeNotebookId;
+      // إذا كان "كل الملاحظات" ولم يوجد دفتر، نستخدم الدفتر الأول
+      if (notebookId === null) {
+        if (data.notebooks.length === 0) {
+          alert('الرجاء إنشاء دفتر أولاً');
+          return;
+        }
+        notebookId = data.notebooks[0].id;
+      }
+
+      const newNote = {
+        id: Date.now(),
+        notebookId: notebookId,
+        title: '',
+        content: '',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      data.notes.push(newNote);
+      activeNoteId = newNote.id;
+      saveToStorage();
+      renderNotesList();
+      renderEditor();
+      document.getElementById('noteTitleInput').focus();
+    };
+
+    window.deleteNote = function(id) {
+      data.notes = data.notes.filter(n => n.id !== id);
+      if (activeNoteId === id) {
+        activeNoteId = data.notes.length > 0 ? data.notes[0].id : null;
+      }
+      saveToStorage();
       renderNotesList();
       renderEditor();
     };
@@ -779,75 +731,90 @@
       }
     };
 
-    window.onNoteChange = function() {
-      const note = notes.find(n => n.id === activeNoteId);
+    // ---------- EDITOR INPUT ----------
+    window.onEditorInput = function() {
+      const note = data.notes.find(n => n.id === activeNoteId);
       if (!note) return;
-
-      const titleInput = document.getElementById('noteTitle');
-      const contentInput = document.getElementById('noteContent');
       
-      note.title = titleInput.value;
-      note.content = contentInput.value;
+      const content = document.getElementById('richEditor').innerHTML;
+      note.content = content;
       note.updatedAt = Date.now();
-
-      updateWordCount();
-
-      // Debounce save
+      
       clearTimeout(saveTimeout);
       saveTimeout = setTimeout(() => {
-        saveNotes();
-        renderNotesList(); // تحديث المعاينة في القائمة
-      }, 500);
+        saveToStorage();
+        renderNotesList(); // تحديث المعاينة
+        showSavedIndicator();
+      }, 300);
     };
 
-    window.filterNotes = function(term) {
+    window.updateActiveNoteTitle = function() {
+      const note = data.notes.find(n => n.id === activeNoteId);
+      if (!note) return;
+      note.title = document.getElementById('noteTitleInput').value;
+      note.updatedAt = Date.now();
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        saveToStorage();
+        renderNotesList();
+        showSavedIndicator();
+      }, 300);
+    };
+
+    function showSavedIndicator() {
+      const ind = document.getElementById('saveIndicator');
+      ind.innerHTML = '<i class="fa-solid fa-check"></i> تم الحفظ';
+      setTimeout(() => {
+        ind.innerHTML = '<i class="fa-regular fa-save"></i> تم الحفظ تلقائياً';
+      }, 1500);
+    }
+
+    // ---------- SEARCH ----------
+    window.performSearch = function(term) {
       searchTerm = term.toLowerCase();
       renderNotesList();
     };
 
-    // ---------- TEXT FORMATTING ----------
-    window.formatText = function(command) {
-      const textarea = document.getElementById('noteContent');
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const selectedText = textarea.value.substring(start, end);
-      
-      let formattedText = '';
-      let cursorOffset = 0;
-      
-      switch(command) {
-        case 'bold':
-          formattedText = `**${selectedText}**`;
-          cursorOffset = 2;
-          break;
-        case 'italic':
-          formattedText = `*${selectedText}*`;
-          cursorOffset = 1;
-          break;
-        case 'underline':
-          formattedText = `__${selectedText}__`;
-          cursorOffset = 2;
-          break;
-      }
-      
-      if (selectedText) {
-        textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
-        textarea.selectionStart = start + cursorOffset;
-        textarea.selectionEnd = start + cursorOffset + selectedText.length;
-      }
-      
-      textarea.focus();
-      onNoteChange();
+    // ---------- FORMATTING ----------
+    window.formatDoc = function(command, value = null) {
+      document.execCommand(command, false, value);
+      document.getElementById('richEditor').focus();
+      onEditorInput(); // تحديث المحتوى فوراً
     };
 
-    // ---------- HELPER ----------
+    window.createLink = function() {
+      const url = prompt('أدخل الرابط:');
+      if (url) {
+        document.execCommand('createLink', false, url);
+        onEditorInput();
+      }
+    };
+
+    // ---------- STATS ----------
+    function updateStats() {
+      const editor = document.getElementById('richEditor');
+      const text = editor.innerText || '';
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+      const chars = text.length;
+      document.getElementById('editorStats').textContent = `${words} كلمة | ${chars} حرف`;
+    }
+
+    // ---------- HELPERS ----------
+    function formatRelativeTime(timestamp) {
+      const diff = Date.now() - timestamp;
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days = Math.floor(diff / 86400000);
+      if (minutes < 1) return 'الآن';
+      if (minutes < 60) return `قبل ${minutes} د`;
+      if (hours < 24) return `قبل ${hours} س`;
+      if (days < 7) return `قبل ${days} ي`;
+      return new Date(timestamp).toLocaleDateString('ar-EG', { month:'short', day:'numeric' });
+    }
+
     function escapeHtml(text) {
-      return String(text).replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-      });
+      if (!text) return '';
+      return String(text).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
     }
 
     // ---------- SIDEBAR ----------
@@ -860,18 +827,15 @@
       document.getElementById('overlay').classList.remove('show');
     };
 
-    // ---------- DATE IN TOPBAR ----------
+    // ---------- DATE ----------
     function displayTopbarDate() {
       const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-      const now = new Date();
-      document.getElementById('todayDate').textContent = now.toLocaleDateString('ar-EG', opts);
+      document.getElementById('todayDate').textContent = new Date().toLocaleDateString('ar-EG', opts);
     }
 
-    // ---------- INIT ----------
-    loadNotes();
-    if (notes.length > 0 && !activeNoteId) {
-      activeNoteId = notes[0].id;
-    }
+    // ---------- START ----------
+    initializeData();
+    renderNotebooks();
     renderNotesList();
     renderEditor();
     displayTopbarDate();
