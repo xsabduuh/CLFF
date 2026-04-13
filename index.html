@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== المتغيرات الأساسية ===== */
+    /* ===== المتغيرات الأساسية (قابلة للتعديل من الإعدادات) ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -21,7 +21,7 @@
       --text: #e8e8f0;
       --muted: #6b6b80;
       --muted2: #9090a8;
-      --accent: #7c6aff;
+      --accent: #7c6aff;      /* سيتم استبداله من الإعدادات */
       --accent2: #5e4de8;
       --green: #34d399;
       --amber: #fbbf24;
@@ -437,7 +437,7 @@
       <input type="text" placeholder="بحث سريع... (قريباً)">
     </div>
     <div class="topbar-actions">
-      <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
+      <div class="notif-btn" id="notificationBell"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
       <div class="topbar-avatar" id="topbarAvatar">AO</div>
     </div>
   </header>
@@ -478,7 +478,7 @@
           <div class="stat-icon" style="background:rgba(251,191,36,0.12); color:var(--amber)"><i class="fa-solid fa-wallet"></i></div>
         </div>
         <div class="stat-value" id="statBalance">0.00</div>
-        <div class="stat-sub">درهم مغربي</div>
+        <div class="stat-sub" id="statCurrencyLabel">درهم مغربي</div>
       </div>
       <div class="stat-card">
         <div class="stat-header">
@@ -492,9 +492,7 @@
 
     <!-- الشبكة الرئيسية -->
     <div class="dashboard-grid">
-      <!-- العمود الأيسر -->
       <div class="left-col">
-        <!-- المهام القادمة -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-regular fa-circle-check" style="margin-left:6px;"></i> المهام القادمة</span>
@@ -503,7 +501,6 @@
           <div id="tasksPreviewList"></div>
         </div>
 
-        <!-- الأهداف النشطة -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-solid fa-chart-line" style="margin-left:6px;"></i> الأهداف النشطة</span>
@@ -512,33 +509,21 @@
           <div id="goalsPreviewList"></div>
         </div>
 
-        <!-- ملخص مالي -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-solid fa-wallet" style="margin-left:6px;"></i> ملخص مالي سريع</span>
             <a href="finance.html" class="card-link">المالية <i class="fa-solid fa-arrow-left"></i></a>
           </div>
           <div class="finance-summary">
-            <div class="finance-item">
-              <div class="finance-label">الدخل</div>
-              <div class="finance-value income" id="summaryIncome">0</div>
-            </div>
-            <div class="finance-item">
-              <div class="finance-label">المصروفات</div>
-              <div class="finance-value expense" id="summaryExpense">0</div>
-            </div>
-            <div class="finance-item">
-              <div class="finance-label">الرصيد</div>
-              <div class="finance-value" id="summaryBalance">0</div>
-            </div>
+            <div class="finance-item"><div class="finance-label">الدخل</div><div class="finance-value income" id="summaryIncome">0</div></div>
+            <div class="finance-item"><div class="finance-label">المصروفات</div><div class="finance-value expense" id="summaryExpense">0</div></div>
+            <div class="finance-item"><div class="finance-label">الرصيد</div><div class="finance-value" id="summaryBalance">0</div></div>
           </div>
           <div id="recentTransactions"></div>
         </div>
       </div>
 
-      <!-- العمود الأيمن -->
       <div class="right-col">
-        <!-- العادات اليوم -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-solid fa-fire-flame-curved" style="margin-left:6px;"></i> عادات اليوم</span>
@@ -547,7 +532,6 @@
           <div id="habitsPreviewList"></div>
         </div>
 
-        <!-- تقويم مصغر -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-regular fa-calendar" style="margin-left:6px;"></i> هذا الأسبوع</span>
@@ -557,7 +541,6 @@
           <div style="margin-top:12px; font-size:0.8rem; color:var(--muted2);" id="todayEventsPreview">لا توجد أحداث اليوم</div>
         </div>
 
-        <!-- آخر الملاحظات -->
         <div class="card">
           <div class="card-header">
             <span class="card-title"><i class="fa-regular fa-note-sticky" style="margin-left:6px;"></i> آخر الملاحظات</span>
@@ -566,7 +549,6 @@
           <div id="notesPreviewList"></div>
         </div>
 
-        <!-- إجراءات سريعة -->
         <div class="card">
           <div class="card-header"><span class="card-title">إجراءات سريعة</span></div>
           <div class="quick-actions">
@@ -587,38 +569,57 @@
   (function() {
     "use strict";
 
-    // ---------- UTILS ----------
-    const todayStr = () => new Date().toISOString().split('T')[0];
-    const getToday = () => todayStr();
+    // ---------- إعدادات المستخدم (من localStorage) ----------
+    const SETTINGS_KEY = 'lifeos_settings';
+    let appSettings = {
+      profile: { name: 'أيت عمر', email: 'ait.omar@example.com', avatarColor: 'default' },
+      preferences: { language: 'ar', currency: 'MAD', dateFormat: 'ar-EG' },
+      appearance: { accentColor: '#7c6aff' },
+      notifications: { enabled: true }
+    };
 
-    function loadData(key) {
-      try { return JSON.parse(localStorage.getItem(key)) || []; }
-      catch { return []; }
+    try {
+      const stored = localStorage.getItem(SETTINGS_KEY);
+      if (stored) appSettings = JSON.parse(stored);
+    } catch(e) { /* استخدام الإعدادات الافتراضية */ }
+
+    // تطبيق الإعدادات على الواجهة
+    function applySettings() {
+      // لون التمييز
+      document.documentElement.style.setProperty('--accent', appSettings.appearance.accentColor);
+
+      // الملف الشخصي
+      const fullName = appSettings.profile.name;
+      const firstName = fullName.split(' ')[0];
+      document.getElementById('greetingName').textContent = firstName;
+      document.getElementById('sidebarUserName').textContent = firstName;
+      const initials = fullName.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase() || 'AO';
+      document.getElementById('sidebarAvatar').textContent = initials;
+      document.getElementById('topbarAvatar').textContent = initials;
+
+      // العملة
+      const currencySymbol = { MAD: 'د.م', USD: '$', EUR: '€' }[appSettings.preferences.currency] || 'د.م';
+      const currencyName = { MAD: 'درهم مغربي', USD: 'دولار أمريكي', EUR: 'يورو' }[appSettings.preferences.currency] || 'درهم مغربي';
+      document.getElementById('statCurrencyLabel').textContent = currencyName;
+      window.currencySymbol = currencySymbol;
+
+      // تنسيق التاريخ
+      window.dateLocale = appSettings.preferences.dateFormat || 'ar-EG';
+      window.dateOptions = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+
+      // الإشعارات
+      const bell = document.getElementById('notificationBell');
+      if (!appSettings.notifications.enabled) {
+        bell.style.opacity = '0.5';
+        bell.title = 'الإشعارات معطلة';
+      }
     }
+    applySettings();
 
-    // ---------- LOAD ALL DATA ----------
-    const tasks = loadData('lifeos_tasks');
-    const habits = loadData('lifeos_habits');
-    const goals = loadData('lifeos_goals');
-    const finance = loadData('lifeos_finance_v2');
-    const notesData = loadData('lifeos_notes_v2');
-    const calendar = loadData('lifeos_calendar');
-    const settings = JSON.parse(localStorage.getItem('lifeos_settings') || '{}');
-
-    // تحديث واجهة المستخدم بالإعدادات
-    const userName = settings.profile?.name || 'أيت عمر';
-    const firstName = userName.split(' ')[0];
-    document.getElementById('greetingName').textContent = firstName;
-    document.getElementById('sidebarUserName').textContent = firstName;
-    const avatarInitials = userName.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase() || 'AO';
-    document.getElementById('sidebarAvatar').textContent = avatarInitials;
-    document.getElementById('topbarAvatar').textContent = avatarInitials;
-
-    // تاريخ اليوم
+    // ---------- تحديث التواريخ بالواجهة ----------
     const now = new Date();
-    const dateOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-    document.getElementById('todayDate').textContent = now.toLocaleDateString('ar-EG', dateOpts);
-    document.getElementById('currentDateFull').textContent = now.toLocaleDateString('ar-EG', dateOpts);
+    document.getElementById('todayDate').textContent = now.toLocaleDateString(window.dateLocale, window.dateOptions);
+    document.getElementById('currentDateFull').textContent = now.toLocaleDateString(window.dateLocale, window.dateOptions);
 
     // رسالة ترحيب حسب الوقت
     const hour = now.getHours();
@@ -627,6 +628,27 @@
     else if (hour < 18) greetingMsg = '🌤️ مساء الخير! تابع تقدمك.';
     else greetingMsg = '🌙 ليلة سعيدة! راجع إنجازاتك.';
     document.getElementById('greetingMessage').textContent = greetingMsg;
+
+    // ---------- دوال مساعدة ----------
+    const todayStr = () => now.toISOString().split('T')[0];
+    const getToday = () => todayStr();
+
+    function loadData(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; }
+      catch { return []; }
+    }
+
+    function formatMoney(amount) {
+      return `${amount.toFixed(0)} ${window.currencySymbol}`;
+    }
+
+    // ---------- تحميل البيانات ----------
+    const tasks = loadData('lifeos_tasks');
+    const habits = loadData('lifeos_habits');
+    const goals = loadData('lifeos_goals');
+    const finance = loadData('lifeos_finance_v2');
+    const notesData = loadData('lifeos_notes_v2');
+    const calendar = loadData('lifeos_calendar');
 
     // ---------- STATS CARDS ----------
     const activeTasks = tasks.filter(t => !t.completed).length;
@@ -642,7 +664,7 @@
     document.getElementById('statHabitsDone').textContent = `${habitsDoneToday}/${totalHabits}`;
     document.getElementById('statHabitsPercent').textContent = `${habitsPercent}%`;
 
-    // Finance summary
+    // المالية (الشهر الحالي)
     const nowMonth = now.getMonth(); const nowYear = now.getFullYear();
     const monthTx = (finance || []).filter(t => {
       const d = new Date(t.date); return d.getMonth() === nowMonth && d.getFullYear() === nowYear;
@@ -650,10 +672,10 @@
     const income = monthTx.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
     const expense = monthTx.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
     const balance = income - expense;
-    document.getElementById('statBalance').textContent = balance.toFixed(0) + ' د.م';
-    document.getElementById('summaryIncome').textContent = income.toFixed(0);
-    document.getElementById('summaryExpense').textContent = expense.toFixed(0);
-    document.getElementById('summaryBalance').textContent = balance.toFixed(0);
+    document.getElementById('statBalance').textContent = formatMoney(balance);
+    document.getElementById('summaryIncome').textContent = formatMoney(income);
+    document.getElementById('summaryExpense').textContent = formatMoney(expense);
+    document.getElementById('summaryBalance').textContent = formatMoney(balance);
 
     const goalAvg = goals.length ? Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length) : 0;
     document.getElementById('statGoalAvg').textContent = goalAvg + '%';
@@ -735,7 +757,7 @@
       txContainer.innerHTML = recentTx.map(t => `
         <div class="transaction-mini">
           <span>${escapeHtml(t.description)}</span>
-          <span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${t.amount.toFixed(0)} د.م</span>
+          <span class="amount ${t.type}">${t.type === 'income' ? '+' : '-'}${formatMoney(t.amount)}</span>
         </div>
       `).join('');
     }
@@ -763,12 +785,7 @@
     for (let i = 0; i < 7; i++) {
       const d = new Date(now); d.setDate(now.getDate() - todayIndex + i);
       const isToday = i === todayIndex;
-      weekHtml += `
-        <div class="week-day ${isToday ? 'today' : ''}" onclick="window.location.href='calendar.html'">
-          <div class="dow">${daysAr[i].substring(0,3)}</div>
-          <div class="dom">${d.getDate()}</div>
-        </div>
-      `;
+      weekHtml += `<div class="week-day ${isToday ? 'today' : ''}" onclick="window.location.href='calendar.html'"><div class="dow">${daysAr[i].substring(0,3)}</div><div class="dom">${d.getDate()}</div></div>`;
     }
     weekStrip.innerHTML = weekHtml;
 
