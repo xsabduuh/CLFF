@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LifeOS — المهام</title>
+  <!-- الخطوط والأيقونات -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== متغيرات (موحّدة) ===== */
+    /* ===== إعدادات أساسية (زجاجية) ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -26,6 +27,7 @@
       --purple: #9b59b6;
       --sidebar-w: 260px;
       --topbar-h: 70px;
+      --radius-xl: 30px;
       --radius-lg: 24px;
       --radius-md: 18px;
       --radius-sm: 12px;
@@ -44,7 +46,7 @@
                         radial-gradient(circle at 80% 70%, rgba(52, 152, 219, 0.06) 0%, transparent 50%);
     }
 
-    /* ===== SIDEBAR ===== */
+    /* ===== شريط جانبي (زجاجي) ===== */
     .sidebar {
       width: var(--sidebar-w);
       background: var(--glass-bg);
@@ -134,14 +136,14 @@
     }
     .overlay.show { display: block; }
 
-    /* ===== MAIN ===== */
+    /* ===== المحتوى الرئيسي ===== */
     .main {
       margin-right: var(--sidebar-w);
       flex: 1; display: flex; flex-direction: column;
       min-height: 100vh;
     }
 
-    /* ===== TOPBAR ===== */
+    /* ===== الشريط العلوي (زجاجي) ===== */
     .topbar {
       height: var(--topbar-h);
       border-bottom: 1px solid var(--glass-border);
@@ -197,14 +199,27 @@
       font-weight: 700; color: #fff; cursor: pointer;
     }
 
-    /* ===== CONTENT ===== */
+    /* ===== منطقة المحتوى ===== */
     .content { flex: 1; padding: 30px 32px; max-width: 1000px; }
 
+    /* ===== رأس الصفحة ===== */
     .page-header { margin-bottom: 28px; }
     .page-header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
     .page-header p { color: var(--muted); margin-top: 6px; }
 
-    /* ===== ADD TASK ===== */
+    /* ===== شريحة إحصاءات سريعة ===== */
+    .stats-mini {
+      display: flex; gap: 16px; margin-bottom: 24px;
+    }
+    .stat-chip {
+      background: var(--glass-bg); backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); border-radius: 40px;
+      padding: 8px 18px; display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem;
+    }
+    .stat-chip i { color: var(--accent); }
+
+    /* ===== إضافة مهمة ===== */
     .add-box {
       display: flex; gap: 12px; margin-bottom: 30px;
       background: var(--glass-bg); backdrop-filter: blur(12px);
@@ -226,7 +241,7 @@
     }
     .add-btn:hover { background: #b088ff; transform: translateY(-2px); }
 
-    /* ===== FILTERS ===== */
+    /* ===== أزرار التصفية ===== */
     .filters { display: flex; gap: 10px; margin-bottom: 24px; }
     .filter-btn {
       padding: 10px 24px; background: var(--glass-bg); border: 1px solid var(--glass-border);
@@ -236,7 +251,7 @@
     }
     .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    /* ===== TASKS LIST ===== */
+    /* ===== قائمة المهام ===== */
     .tasks-list {
       background: var(--glass-bg); backdrop-filter: blur(12px);
       border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
@@ -266,9 +281,11 @@
     }
     .del-btn:hover { color: var(--red); background: rgba(231,76,60,0.1); }
 
-    .empty-state { text-align: center; padding: 48px; color: var(--muted); }
+    .empty-state {
+      text-align: center; padding: 48px; color: var(--muted);
+    }
 
-    /* ===== RESPONSIVE ===== */
+    /* ===== تجاوب ===== */
     @media (max-width: 900px) {
       .sidebar { transform: translateX(100%); }
       .sidebar.open { transform: translateX(0); }
@@ -327,7 +344,7 @@
       <input type="text" id="searchInput" placeholder="ابحث في المهام..." oninput="onSearch(this.value)">
     </div>
     <div class="topbar-actions">
-      <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
+      <div class="notif-btn" id="notificationBell"><i class="fa-regular fa-bell"></i><span class="notif-dot"></span></div>
       <div class="topbar-avatar" id="topbarAvatar">AO</div>
     </div>
   </header>
@@ -336,6 +353,13 @@
     <div class="page-header">
       <h1>مهامي</h1>
       <p>أدر مهامك اليومية وحافظ على إنتاجيتك.</p>
+    </div>
+
+    <!-- إحصائيات سريعة -->
+    <div class="stats-mini">
+      <div class="stat-chip"><i class="fa-solid fa-list-check"></i> <span id="totalTasksCount">0</span> إجمالي</div>
+      <div class="stat-chip"><i class="fa-regular fa-circle-check"></i> <span id="completedTasksCount">0</span> مكتملة</div>
+      <div class="stat-chip"><i class="fa-regular fa-clock"></i> <span id="pendingTasksCount">0</span> متبقية</div>
     </div>
 
     <div class="add-box">
@@ -380,7 +404,7 @@
       document.getElementById('topbarAvatar').textContent = initials;
       window.dateLocale = appSettings.preferences.dateFormat || 'ar-EG';
       if (!appSettings.notifications.enabled) {
-        document.querySelector('.notif-btn').style.opacity = '0.5';
+        document.getElementById('notificationBell').style.opacity = '0.5';
       }
     }
     applySettings();
@@ -406,6 +430,16 @@
 
     function escapeHtml(s) { return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 
+    function updateStats() {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed).length;
+      const pending = total - completed;
+      document.getElementById('totalTasksCount').textContent = total;
+      document.getElementById('completedTasksCount').textContent = completed;
+      document.getElementById('pendingTasksCount').textContent = pending;
+      document.getElementById('pendingTasksBadge').textContent = pending;
+    }
+
     function renderTasks() {
       const container = document.getElementById('tasksList');
       let filtered = tasks;
@@ -413,7 +447,7 @@
       else if (currentFilter === 'completed') filtered = tasks.filter(t => t.completed);
       if (searchQuery) filtered = filtered.filter(t => t.text.toLowerCase().includes(searchQuery));
 
-      document.getElementById('pendingTasksBadge').textContent = tasks.filter(t => !t.completed).length;
+      updateStats();
 
       if (filtered.length === 0) {
         container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-circle-check" style="font-size:2.5rem; opacity:0.5; margin-bottom:16px;"></i><p>لا توجد مهام</p></div>`;
