@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ===== متغيرات (موحّدة مع Dashboard) ===== */
+    /* ===== متغيرات (موحّدة) ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -44,7 +44,7 @@
                         radial-gradient(circle at 80% 70%, rgba(52, 152, 219, 0.06) 0%, transparent 50%);
     }
 
-    /* ===== SIDEBAR (مطابق) ===== */
+    /* ===== SIDEBAR ===== */
     .sidebar {
       width: var(--sidebar-w);
       background: var(--glass-bg);
@@ -245,12 +245,15 @@
     .task-item {
       display: flex; align-items: center; gap: 16px;
       padding: 16px 20px; border-bottom: 1px solid var(--glass-border);
+      transition: var(--transition);
     }
     .task-item:last-child { border-bottom: none; }
+    .task-item:hover { background: rgba(255,255,255,0.02); }
     .task-check {
       width: 24px; height: 24px; border: 2px solid var(--muted);
       border-radius: 8px 2px 8px 2px; cursor: pointer;
       display: grid; place-items: center; color: transparent;
+      transition: var(--transition);
     }
     .task-check.checked { background: var(--accent); border-color: var(--accent); color: #fff; }
     .task-text { flex: 1; font-size: 1rem; }
@@ -281,6 +284,7 @@
 </head>
 <body>
 
+<!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
   <a href="index.html" class="sidebar-logo">
     <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
@@ -301,12 +305,16 @@
   <div class="sidebar-footer">
     <div class="user-card">
       <div class="avatar" id="sidebarAvatar">AO</div>
-      <div style="flex:1"><div class="user-name" id="sidebarUserName">أيت عمر</div><div class="user-role">خطة مجانية</div></div>
+      <div style="flex:1">
+        <div class="user-name" id="sidebarUserName">أيت عمر</div>
+        <div class="user-role">خطة مجانية</div>
+      </div>
     </div>
   </div>
 </aside>
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
+<!-- Main -->
 <div class="main">
   <header class="topbar">
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
@@ -347,6 +355,8 @@
 
 <script>
   (function() {
+    "use strict";
+
     // ---------- إعدادات المستخدم ----------
     const SETTINGS_KEY = 'lifeos_settings';
     let appSettings = {
@@ -394,6 +404,8 @@
       return new Date(ts).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
     }
 
+    function escapeHtml(s) { return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+
     function renderTasks() {
       const container = document.getElementById('tasksList');
       let filtered = tasks;
@@ -417,8 +429,6 @@
         </div>
       `).join('');
     }
-
-    function escapeHtml(s) { return String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 
     window.addTask = function() {
       const input = document.getElementById('taskInput');
@@ -455,6 +465,7 @@
 
     document.getElementById('taskInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
 
+    // Sidebar toggle
     window.toggleSidebar = () => {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('show');
