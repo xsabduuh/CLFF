@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS — التقويم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ===== المتغيرات الأساسية (موحّدة) ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c0f;
+      --surface: #111115;
+      --surface2: #18181e;
+      --surface3: #1f1f27;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.10);
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --muted2: #9090a8;
+      --accent: #7c6aff;
+      --accent2: #5e4de8;
+      --green: #34d399;
+      --amber: #fbbf24;
+      --red: #f87171;
+      --blue: #60a5fa;
+      --purple: #a78bfa;
+      --sidebar-w: 240px;
+      --topbar-h: 64px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.18s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { font-size: 15px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ===== SIDEBAR (موحّد) ===== */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; right: 0;
+      height: 100vh;
+      z-index: 100;
+      transition: transform var(--transition);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    .logo-text span { color: var(--accent); }
+
+    .sidebar-section {
+      padding: 14px 12px 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    nav { flex: 1; overflow-y: auto; padding: 8px 12px; }
+    nav::-webkit-scrollbar { width: 4px; }
+    nav::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: background var(--transition), color var(--transition);
+      margin-bottom: 2px;
+      position: relative;
+    }
+    .nav-item i { width: 20px; text-align: center; font-size: 0.95rem; flex-shrink: 0; }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active {
+      background: rgba(124,106,255,0.12);
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      right: -12px;
+      top: 50%; transform: translateY(-50%);
+      width: 3px; height: 60%;
+      background: var(--accent);
+      border-radius: 3px 0 0 3px;
+    }
+
+    .nav-badge {
+      margin-right: auto;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 14px 12px;
+    }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .user-card:hover { background: var(--surface2); }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+    .user-role { font-size: 0.72rem; color: var(--muted); }
+
+    /* ===== OVERLAY (mobile) ===== */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 99;
+      backdrop-filter: blur(2px);
+    }
+    .overlay.show { display: block; }
+
+    /* ===== MAIN ===== */
+    .main {
+      margin-right: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      height: var(--topbar-h);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 28px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(12,12,15,0.88);
+      backdrop-filter: blur(16px);
+    }
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--muted2);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: color var(--transition), background var(--transition);
+    }
+    .menu-btn:hover { color: var(--text); background: var(--surface2); }
+
+    .topbar-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .topbar-date {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .search-bar {
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      padding: 7px 14px;
+      width: 220px;
+      transition: border-color var(--transition), width var(--transition);
+    }
+    .search-bar:focus-within { border-color: var(--accent); width: 260px; }
+    .search-bar i { color: var(--muted); font-size: 0.8rem; }
+    .search-bar input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+    .search-bar input::placeholder { color: var(--muted); }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .notif-btn {
+      position: relative;
+      width: 36px; height: 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--muted2);
+      font-size: 0.85rem;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .notif-btn:hover { color: var(--text); border-color: var(--border2); }
+    .notif-dot {
+      position: absolute;
+      top: 7px; left: 7px;
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 1.5px solid var(--bg);
+    }
+    .topbar-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      display: grid;
+      place-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: border-color var(--transition);
+    }
+    .topbar-avatar:hover { border-color: var(--accent); }
+
+    /* ===== CONTENT ===== */
+    .content { flex: 1; padding: 24px 28px; }
+
+    /* ===== DATE NAVIGATION ===== */
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .date-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .date-nav-btn {
+      width: 36px; height: 36px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--muted2);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .date-nav-btn:hover {
+      background: var(--surface3);
+      color: var(--text);
+      border-color: var(--border2);
+    }
+    .current-date {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      min-width: 200px;
+      text-align: center;
+    }
+    .today-btn {
+      padding: 8px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition);
+    }
+    .today-btn:hover { background: var(--accent2); }
+
+    /* ===== TIMELINE ===== */
+    .timeline-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .timeline-header {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .timeline-header > div {
+      padding: 12px 16px;
+    }
+    .timeline-body {
+      max-height: calc(100vh - 280px);
+      overflow-y: auto;
+    }
+    .timeline-body::-webkit-scrollbar { width: 6px; }
+    .timeline-body::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+    .hour-row {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      border-bottom: 1px solid var(--border);
+      min-height: 70px;
+    }
+    .hour-row.current-hour {
+      background: rgba(124,106,255,0.06);
+      position: relative;
+    }
+    .hour-row.current-hour::before {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+    }
+    .hour-label {
+      padding: 12px 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted2);
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+    }
+    .hour-cell {
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Event Block */
+    .event-block {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .event-block:hover {
+      background: var(--surface3);
+      border-color: var(--accent);
+    }
+    .event-time {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .event-text {
+      flex: 1;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+    .event-actions {
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .event-block:hover .event-actions { opacity: 1; }
+    .event-btn {
+      width: 26px; height: 26px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 0.7rem;
+      transition: all var(--transition);
+    }
+    .event-btn.edit:hover {
+      background: rgba(96,165,250,0.1);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .event-btn.delete:hover {
+      background: rgba(248,113,113,0.1);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .add-event-placeholder {
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all var(--transition);
+    }
+    .add-event-placeholder:hover {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 400px;
+      max-width: 90vw;
+      padding: 24px;
+    }
+    .modal h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .modal-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    .modal-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,0.12);
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .modal-btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition);
+    }
+    .modal-btn.cancel {
+      background: var(--surface2);
+      color: var(--muted2);
+      border: 1px solid var(--border);
+    }
+    .modal-btn.cancel:hover { background: var(--surface3); color: var(--text); }
+    .modal-btn.save {
+      background: var(--accent);
+      color: #fff;
+    }
+    .modal-btn.save:hover { background: var(--accent2); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-day-message {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(100%); }
+      .sidebar.open { transform: translateX(0); box-shadow: -24px 0 60px rgba(0,0,0,0.5); }
+      .main { margin-right: 0; }
+      .menu-btn { display: grid; }
+      .search-bar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .content { padding: 16px; }
+      .topbar { padding: 0 16px; }
+      .timeline-header { grid-template-columns: 60px 1fr; }
+      .hour-row { grid-template-columns: 60px 1fr; }
+      .current-date { font-size: 1rem; min-width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar (موحّد) -->
+<aside class="sidebar" id="sidebar">
+  <a href="index.html" class="sidebar-logo">
+    <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+    <span class="logo-text">Life<span>OS</span></span>
+  </a>
+  <nav>
+    <div class="sidebar-section">الرئيسية</div>
+    <a href="index.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم</a>
+    <a href="tasks.html" class="nav-item"><i class="fa-solid fa-circle-check"></i> المهام</a>
+    <a href="habits.html" class="nav-item"><i class="fa-solid fa-fire-flame-curved"></i> العادات</a>
+    <a href="goals.html" class="nav-item"><i class="fa-solid fa-bullseye"></i> الأهداف</a>
+    <a href="calendar.html" class="nav-item active"><i class="fa-regular fa-calendar"></i> التقويم</a>
+    <div class="sidebar-section" style="margin-top:8px">أدوات</div>
+    <a href="finance.html" class="nav-item"><i class="fa-solid fa-wallet"></i> المالية</a>
+    <a href="notes.html" class="nav-item"><i class="fa-regular fa-note-sticky"></i> الملاحظات</a>
+    <a href="settings.html" class="nav-item"><i class="fa-solid fa-gear"></i> الإعدادات</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar">AO</div>
+      <div class="user-info">
+        <div class="user-name">أيت عمر</div>
+        <div class="user-role">خطة مجانية</div>
+      </div>
+      <i class="fa-solid fa-ellipsis-vertical" style="color:var(--muted);font-size:.75rem"></i>
+    </div>
+  </div>
+</aside>
+
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar موحّد -->
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+    <div>
+      <div class="topbar-title">التقويم</div>
+      <div class="topbar-date" id="todayDate"></div>
+    </div>
+    <div class="search-bar">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" placeholder="بحث..." disabled>
+    </div>
+    <div class="topbar-actions">
+      <div class="notif-btn">
+        <i class="fa-regular fa-bell"></i>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topbar-avatar">AO</div>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- رأس التقويم مع التنقل بين الأيام -->
+    <div class="calendar-header">
+      <div class="date-nav">
+        <button class="date-nav-btn" onclick="changeDate(-1)"><i class="fa-solid fa-chevron-right"></i></button>
+        <span class="current-date" id="currentDateDisplay"></span>
+        <button class="date-nav-btn" onclick="changeDate(1)"><i class="fa-solid fa-chevron-left"></i></button>
+      </div>
+      <button class="today-btn" onclick="goToToday()">
+        <i class="fa-regular fa-calendar-check"></i> اليوم
+      </button>
+    </div>
+
+    <!-- المخطط الزمني -->
+    <div class="timeline-container">
+      <div class="timeline-header">
+        <div>الوقت</div>
+        <div>النشاط</div>
+      </div>
+      <div class="timeline-body" id="timelineBody">
+        <!-- سيتم ملؤه عبر JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal لإضافة/تعديل حدث -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal">
+    <h3 id="modalTitle">إضافة نشاط</h3>
+    <input type="text" class="modal-input" id="eventInput" placeholder="وصف النشاط..." maxlength="100">
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">إلغاء</button>
+      <button class="modal-btn save" onclick="saveEvent()">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    // ---------- CONSTANTS ----------
+    const STORAGE_KEY = 'lifeos_calendar';
+    
+    // ---------- STATE ----------
+    let currentDate = new Date();
+    let events = {}; // شكل: { "2026-04-13": { "9": "اجتماع", "14": "تمرين" } }
+    let editingHour = null; // { hour, dateStr }
+
+    // ---------- UTILS ----------
+    function formatDateKey(date) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    }
+
+    function formatDisplayDate(date) {
+      return date.toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function formatHour(hour) {
+      const h = hour % 12 || 12;
+      const ampm = hour < 12 ? 'ص' : 'م';
+      return `${h}:00 ${ampm}`;
+    }
+
+    // ---------- LOAD / SAVE ----------
+    function loadEvents() {
+      try {
+        events = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch { events = {}; }
+    }
+
+    function saveEvents() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    }
+
+    function getEventsForDate(date) {
+      const key = formatDateKey(date);
+      return events[key] || {};
+    }
+
+    function setEventForDate(date, hour, text) {
+      const key = formatDateKey(date);
+      if (!events[key]) events[key] = {};
+      if (text.trim() === '') {
+        delete events[key][hour];
+        if (Object.keys(events[key]).length === 0) delete events[key];
+      } else {
+        events[key][hour] = text.trim();
+      }
+      saveEvents();
+    }
+
+    function deleteEvent(date, hour) {
+      const key = formatDateKey(date);
+      if (events[key]) {
+        delete events[key][hour];
+        if (Object.keys(events[key]).length === 0) delete events[key];
+        saveEvents();
+      }
+    }
+
+    // ---------- RENDER TIMELINE ----------
+    function renderTimeline() {
+      const body = document.getElementById('timelineBody');
+      const dateKey = formatDateKey(currentDate);
+      const dayEvents = events[dateKey] || {};
+      const now = new Date();
+      const isToday = dateKey === formatDateKey(now);
+      const currentHour = now.getHours();
+
+      let html = '';
+      for (let hour = 0; hour < 24; hour++) {
+        const eventText = dayEvents[hour] || '';
+        const isCurrentHour = isToday && hour === currentHour;
+        
+        html += `
+          <div class="hour-row ${isCurrentHour ? 'current-hour' : ''}" data-hour="${hour}">
+            <div class="hour-label">${formatHour(hour)}</div>
+            <div class="hour-cell">
+              ${eventText ? `
+                <div class="event-block" onclick="openEditModal(${hour}, '${escapeHtml(eventText)}')">
+                  <span class="event-time">${formatHour(hour)}</span>
+                  <span class="event-text">${escapeHtml(eventText)}</span>
+                  <div class="event-actions">
+                    <button class="event-btn edit" onclick="event.stopPropagation(); openEditModal(${hour}, '${escapeHtml(eventText)}')" title="تعديل">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button class="event-btn delete" onclick="event.stopPropagation(); deleteEventAndRender(${hour})" title="حذف">
+                      <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                  </div>
+                </div>
+              ` : `
+                <span class="add-event-placeholder" onclick="openAddModal(${hour})">
+                  <i class="fa-regular fa-plus"></i> إضافة نشاط
+                </span>
+              `}
+            </div>
+          </div>
+        `;
+      }
+      body.innerHTML = html;
+      updateDisplayDate();
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        if (m === '"') return '&quot;';
+        return m;
+      });
+    }
+
+    function updateDisplayDate() {
+      document.getElementById('currentDateDisplay').textContent = formatDisplayDate(currentDate);
+      const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+      document.getElementById('todayDate').textContent = new Date().toLocaleDateString('ar-EG', opts);
+    }
+
+    // ---------- DATE NAVIGATION ----------
+    window.changeDate = function(delta) {
+      currentDate.setDate(currentDate.getDate() + delta);
+      renderTimeline();
+    };
+
+    window.goToToday = function() {
+      currentDate = new Date();
+      renderTimeline();
+    };
+
+    // ---------- MODAL HANDLING ----------
+    const modal = document.getElementById('eventModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const eventInput = document.getElementById('eventInput');
+
+    window.openAddModal = function(hour) {
+      editingHour = { hour, dateStr: formatDateKey(currentDate) };
+      modalTitle.textContent = `إضافة نشاط - ${formatHour(hour)}`;
+      eventInput.value = '';
+      modal.classList.add('show');
+      eventInput.focus();
+    };
+
+    window.openEditModal = function(hour, currentText) {
+      editingHour = { hour, dateStr: formatDateKey(currentDate) };
+      modalTitle.textContent = `تعديل النشاط - ${formatHour(hour)}`;
+      eventInput.value = currentText;
+      modal.classList.add('show');
+      eventInput.focus();
+    };
+
+    window.closeModal = function() {
+      modal.classList.remove('show');
+      editingHour = null;
+    };
+
+    window.saveEvent = function() {
+      if (!editingHour) return;
+      const text = eventInput.value.trim();
+      if (text) {
+        setEventForDate(currentDate, editingHour.hour, text);
+      } else {
+        // إذا كان النص فارغاً، نحذف الحدث
+        deleteEvent(currentDate, editingHour.hour);
+      }
+      closeModal();
+      renderTimeline();
+    };
+
+    window.deleteEventAndRender = function(hour) {
+      deleteEvent(currentDate, hour);
+      renderTimeline();
+    };
+
+    // إغلاق المودال بالنقر خارجها
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // حفظ بالضغط على Enter
+    eventInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveEvent();
+    });
+
+    // ---------- SIDEBAR ----------
+    window.toggleSidebar = function() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    };
+    window.closeSidebar = function() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('show');
+    };
+
+    // ---------- INIT ----------
+    loadEvents();
+    renderTimeline();
+  })();
+</script>
+</body>
+</html>
